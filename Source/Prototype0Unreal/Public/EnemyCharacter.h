@@ -3,16 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
+#include "PooledCharacter.h"
 #include "EnemyCharacter.generated.h"
 
 UENUM()
 enum class EEnemyState : uint8 {
-	Idle UMETA(DisplayName = "Idle"), Dead UMETA(DisplayName = "Dead")
+	Alive UMETA(DisplayName = "Alive"), Dead UMETA(DisplayName = "Dead")
 };
 
 UCLASS()
-class PROTOTYPE0UNREAL_API AEnemyCharacter : public ACharacter
+class PROTOTYPE0UNREAL_API AEnemyCharacter : public APooledCharacter
 {
 	GENERATED_BODY()
 
@@ -81,4 +81,18 @@ public:
 	
 	UFUNCTION(BlueprintCallable)
 	bool IsInAttackRange(AActor* targetToAttack);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void upgradeEnemy(float HealthIncrease, float DmgIncrease, float SpeedIncrease);
+
+	virtual void SpawnPooledCharacter(FVector location, FRotator rotation, bool setTarget, FVector target) override;
+
+	virtual void DespawnPooledCharacter() override;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EnemySpawned(bool setTarget, FVector target);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void EnemyDespawned();
+
 };

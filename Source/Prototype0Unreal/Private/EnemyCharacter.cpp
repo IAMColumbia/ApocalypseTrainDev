@@ -67,9 +67,15 @@ void AEnemyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if (GetWorld()->GetSubsystem<UGameManagerWSS>()->IsOutOfBackBounds(GetActorLocation())) {
-		Destroy();
+		DespawnPooledCharacter();
 	}
-	ApplyKnockback();
+	switch (EnemyState) {
+		case EEnemyState::Dead:
+			break;
+		case EEnemyState::Alive:
+			ApplyKnockback();
+			break;
+	}
 }
 
 // Called to bind functionality to input
@@ -122,6 +128,22 @@ bool AEnemyCharacter::IsInAttackRange(AActor* targetToAttack) {
 	else {
 		return false;
 	}
+}
+
+void AEnemyCharacter::SpawnPooledCharacter(FVector location, FRotator rotation, bool setTarget, FVector target)
+{
+	EnemyState = EEnemyState::Alive;
+	currentHealth = MaxHealth;
+	NotifyHealthBarWidget();
+	Super::SpawnPooledCharacter(location, rotation, setTarget, target);
+	EnemySpawned(setTarget, target);
+}
+
+void AEnemyCharacter::DespawnPooledCharacter()
+{
+	Super::DespawnPooledCharacter();
+	KnockSpeed = 0;
+	EnemyDespawned();
 }
 
 

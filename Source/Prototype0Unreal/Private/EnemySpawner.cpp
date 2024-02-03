@@ -20,7 +20,13 @@ void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetSubsystem<UGameManagerWSS>()->enemySpawner = this;
-	
+	for (int i = 0; i < MaximumPooledEnemies; i++) {
+		AEnemyCharacter* enemy = GetWorld()->SpawnActor<AEnemyCharacter>(enemyActorClass, FVector(-4000, 0, 0 ),FRotator(0,0,0), FActorSpawnParameters());
+		if (enemy != NULL) {
+			enemyPool.Add(enemy);
+			enemy->DespawnPooledCharacter();
+		}
+	}
 }
 
 // Called every frame
@@ -46,7 +52,7 @@ void AEnemySpawner::SpawnEnemies()
 {
 	for (int i = 0; i < EnemiesPerChunk; i++) {
 		FVector spawnLocation = GetWorld()->GetSubsystem<UGameManagerWSS>()->GetRandomLocationInChunk(100);
-		NotifySpawnEnemy(spawnLocation, FRotator(0,0,(float)FMath::RandRange(0, 180)), false, FVector());
+		SpawnPooledEnemy(spawnLocation, FRotator(0, 0, (float)FMath::RandRange(0, 180)), false, FVector());
 	}
 	EnemiesPerChunk++;
 }
@@ -67,5 +73,21 @@ void AEnemySpawner::IncreaseEnemyDifficulty()
 	EnemySpeed += EnemySpeedIncrease;
 	EnemyHealth += EnemyHealthIncrease;
 	EnemyDamage += EnemyDamageIncrease;
+}
+
+void AEnemySpawner::SpawnPooledEnemy(FVector spawnLocation, FRotator rotation, bool SetTarget, FVector target)
+{
+	if (enemyPool.IsEmpty()) {
+		return;
+	}
+	for (AEnemyCharacter* enemy : enemyPool) {
+		if (enemy != NULL) {
+			if (!enemy->isSpawned()) {
+				enemy->upgradeEnemy(EnemyHealth, EnemyDamage, EnemySpeed);
+				enemy->SpawnPooledCharacter(spawnLocation, rotation, SetTarget, target);
+				break;
+			}
+		}
+	}
 }
 

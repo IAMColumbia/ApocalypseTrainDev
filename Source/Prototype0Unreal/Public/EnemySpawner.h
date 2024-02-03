@@ -18,6 +18,9 @@ public:
 	// Sets default values for this actor's properties
 	AEnemySpawner();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Maximum Enemies")
+	int MaximumPooledEnemies;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Initial Values")
 	float EnemyHealth;
 
@@ -65,6 +68,8 @@ protected:
 
 	FTimerHandle rearSpawner;
 
+	TArray<AEnemyCharacter*> enemyPool;
+
 public:	
 	
 	// Called every frame
@@ -83,4 +88,8 @@ public:
 
 	void IncreaseEnemyDifficulty();
 
+	void SpawnPooledEnemy(FVector spawnLocation, FRotator rotation, bool SetTarget, FVector target);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemyType")
+	TSubclassOf<AEnemyCharacter> enemyActorClass;
 };

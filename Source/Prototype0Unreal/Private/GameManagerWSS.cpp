@@ -25,7 +25,7 @@ void UGameManagerWSS::SpawnNewChunk()
 {
 	chunkSpawner->SpawnNextChunk();
 	TotalMeters = train->TotalMeters;
-	if (train->CanMove && chunkSpawner->TotalChunksSpawned > 0) {
+	if (train->CanMove && chunkSpawner->TotalChunksSpawned >= 0) {
 		if (TotalMeters % enemySpawner->DifficultyIncrease == 0 && TotalMeters > 2) {
 			enemySpawner->IncreaseEnemyDifficulty();
 		}
