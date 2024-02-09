@@ -18,32 +18,31 @@ ATrain::ATrain()
 	PrimaryActorTick.bCanEverTick = true;
 	CanMove = false;
 	Fuel = MaxFuel;
-	currentState = ETrainState::starting;
+	currentTrainState = ETrainState::starting;
 	graceTimeLeft = GraceTime;
 }
 
 void ATrain::StartTrain()
 {
-	if (HasFuel() && currentState != ETrainState::accelerating) {
+	if (HasFuel() && currentTrainState != ETrainState::accelerating) {
 		SetTrainState(ETrainState::accelerating);
 	}
 }
 
-
-
 void ATrain::StopTrain()
 {
-	if (currentState == ETrainState::accelerating) {
+	if (currentTrainState == ETrainState::accelerating) {
 		SetTrainState(ETrainState::decelerating);
 	}
-	
 }
 
 void ATrain::MovementUpdate()
 {
-	switch (currentState) {
+	switch (currentTrainState) {
 		case ETrainState::stopped:
-			SetTrainState(ETrainState::accelerating);
+			if (!Stopped) {
+				SetTrainState(ETrainState::accelerating);
+			}
 			break;
 		case ETrainState::starting:
 			if (currentTrainSpeed < tutorialMaxTrainSpeed) {
@@ -72,17 +71,18 @@ void ATrain::MovementUpdate()
 					currentTrainSpeed -= DecelerationRate;
 				}
 				else {
-					/*currentTrainSpeed = 0;
-					SetTrainState(ETrainState::stopped);*/
+					SetTrainState(ETrainState::stopped);
 					currentTrainSpeed = 0;
-					SetTrainState(ETrainState::accelerating);
+					
 				}
 			}
 			break;
 		default:
 			break;
 	}
-	BurnFuel();
+	if (currentTrainState != ETrainState::stopped && currentTrainState != ETrainState::decelerating) {
+		BurnFuel();
+	}
 }
 
 bool ATrain::HasFuel()
@@ -212,6 +212,12 @@ void ATrain::ToggleTrainState()
 	LeverStateChanged();
 }
 
+void ATrain::StartHordeEncounter()
+{
+	Stopped = true;
+	StopTrain();
+}
+
 bool ATrain::AddFuel() {
 	if (!CanMove) {
 		GetWorld()->GetTimerManager().SetTimer(startTimerHandle, this, &ATrain::TrainCanMove, 1.0, false);
@@ -252,14 +258,14 @@ void ATrain::UpdateFuelState()
 		//notify failed
 		if (!countingDownGameOver && !GetWorld()->GetSubsystem<UGameManagerWSS>()->gameEnded) {
 			countingDownGameOver = true;
-			NotifyTrainStop();
+			//NotifyTrainStop();
 			graceTimeLeft = GraceTime;
 			GetWorld()->GetTimerManager().SetTimer(countdown, this, &ATrain::DecrementGameOverCounter, 1, true);
 		}
 	}
 	if (countingDownGameOver) {
 		if (HasFuel()) {
-			NotifyTrainStart();
+			//NotifyTrainStart();
 			GetWorld()->GetTimerManager().ClearTimer(countdown);
 			countingDownGameOver = false;
 		}
@@ -356,13 +362,15 @@ void ATrain::SetTrainState(ETrainState stateToSet)
 {
 	switch (stateToSet) {
 		case ETrainState::stopped:
+			NotifyTrainStop();
 			GetWorld()->GetSubsystem<UGameManagerWSS>()->OnTrainStopped();
 			break;
 		case ETrainState::accelerating:
+			NotifyTrainStart();
 			GetWorld()->GetSubsystem<UGameManagerWSS>()->OnTrainAccelerating();
 			break;
 		case ETrainState::decelerating:
 			break;
 	}
-	currentState = stateToSet;
+	currentTrainState = stateToSet;
 }

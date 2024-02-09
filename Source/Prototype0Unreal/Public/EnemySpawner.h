@@ -56,6 +56,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawning")
 	float RearSpawnRate;
 
+	int ZombiesAlive();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -72,6 +74,13 @@ protected:
 
 public:	
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Encounter")
+	int enemiesPerEncounter = 2;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Encounter")
+	int enemiesPerEncounterIncrease = 2;
+
+	bool EncounterSpawningComplete;
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

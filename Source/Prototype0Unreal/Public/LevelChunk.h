@@ -23,4 +23,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void GetLength(UPARAM(DisplayName = "Chunk Base Length") float& length_out);
+	UFUNCTION(BlueprintCallable)
+	virtual FVector GetScale();
+
+	UStaticMeshComponent* chunkBase;
+
+
 };

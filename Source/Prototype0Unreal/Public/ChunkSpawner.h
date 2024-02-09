@@ -25,6 +25,9 @@ protected:
 	void spawnLevelChunk();
 
 public:	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int PreviousChunk;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Spawning")
 	FVector chunkScale;
 

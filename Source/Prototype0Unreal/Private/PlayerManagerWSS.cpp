@@ -107,6 +107,12 @@ void UPlayerManagerWSS::ShareCoins(int coins)
 	}
 }
 
+FVector UPlayerManagerWSS::GetRandomPlayerLocation()
+{
+	int player = FMath::RandRange(0, NumActivePlayers()-1);
+	return Players[player]->GetActorLocation();
+}
+
 bool UPlayerManagerWSS::AllPlayersDead()
 {
 	int deadPlayers = 0;

@@ -15,6 +15,17 @@ AEnemySpawner::AEnemySpawner()
 	
 }
 
+int AEnemySpawner::ZombiesAlive()
+{
+	int alive = 0;
+	for (AEnemyCharacter* e : enemyPool) {
+		if (e->isSpawned()) {
+			alive++;
+		}
+	}
+	return alive;
+}
+
 // Called when the game starts or when spawned
 void AEnemySpawner::BeginPlay()
 {
@@ -27,25 +38,32 @@ void AEnemySpawner::BeginPlay()
 			enemy->DespawnPooledCharacter();
 		}
 	}
+	EncounterSpawningComplete = true;
 }
 
 // Called every frame
 void AEnemySpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+	/*if (ZombiesAlive() <= 0 && EncounterSpawningComplete && GetWorld()->GetSubsystem<UGameManagerWSS>()->CurrentGameState == EGameState::encounter) {
+		
+	}*/
 }
 
 void AEnemySpawner::StartRearSpawner()
 {
-	GetWorld()->GetTimerManager().SetTimer(rearSpawner, this, &AEnemySpawner::SpawnEnemyBehindTrain, RearSpawnRate, true);
-	int chunks = GetWorld()->GetSubsystem<UGameManagerWSS>()->TotalChunksSpawned();
-	RearSpawnRate -= (chunks*SpawnRateIncrease);
+	if (EncounterSpawningComplete == true) {
+		EncounterSpawningComplete = false;
+		GetWorld()->GetTimerManager().SetTimer(rearSpawner, this, &AEnemySpawner::SpawnEnemyBehindTrain, RearSpawnRate, true);
+		int chunks = GetWorld()->GetSubsystem<UGameManagerWSS>()->TotalChunksSpawned();
+		RearSpawnRate -= (chunks * SpawnRateIncrease);
+	}
 }
 
 void AEnemySpawner::StopRearSpawner()
 {
 	GetWorld()->GetTimerManager().ClearTimer(rearSpawner);
+	EncounterSpawningComplete = true;
 }
 
 void AEnemySpawner::SpawnEnemies()
@@ -60,7 +78,14 @@ void AEnemySpawner::SpawnEnemies()
 void AEnemySpawner::SpawnEnemyBehindTrain()
 {
 	FVector spawnLoc = GetWorld()->GetSubsystem<UGameManagerWSS>()->GetRandomLocationBehindTrain();
-	NotifySpawnEnemy(spawnLoc, FRotator().ZeroRotator, true, GetWorld()->GetSubsystem<UGameManagerWSS>()->GetTrainLocation());
+	FVector trainLoc = GetWorld()->GetSubsystem<UGameManagerWSS>()->GetTrainLocation();
+	SpawnPooledEnemy(spawnLoc, FRotator().ZeroRotator, true, FVector(400, trainLoc.Y + 500,20));
+	enemiesPerEncounter--;
+	if (enemiesPerEncounter <= 0) {
+		StopRearSpawner();
+		enemiesPerEncounter += enemiesPerEncounterIncrease;
+		GetWorld()->GetSubsystem<UGameManagerWSS>()->EnterStation();
+	}
 }
 
 void AEnemySpawner::PrintStuff()

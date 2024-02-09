@@ -2,11 +2,17 @@
 
 
 #include "StationChunk.h"
+#include "GameManagerWSS.h"
+#include "EnemySpawner.h"
+
 
 bool AStationChunk::isEnterable()
 {
-
-    return false;
+    AEnemySpawner* spawner = GetWorld()->GetSubsystem<UGameManagerWSS>()->enemySpawner;
+    if (spawner->ZombiesAlive() > 0) {
+        return false;
+    }
+    return true;
 }
 
 bool AStationChunk::isExitable()

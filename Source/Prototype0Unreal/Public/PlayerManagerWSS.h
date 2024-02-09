@@ -46,6 +46,9 @@ public:
 
 	void ShareCoins(int coins);
 
+	UFUNCTION(BlueprintCallable)
+	FVector GetRandomPlayerLocation();
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 

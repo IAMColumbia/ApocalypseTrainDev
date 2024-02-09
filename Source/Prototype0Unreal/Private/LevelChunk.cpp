@@ -15,7 +15,17 @@ ALevelChunk::ALevelChunk()
 void ALevelChunk::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	TSet<UActorComponent*> components = GetComponents();
+	for (UActorComponent* Component : components)
+	{
+		if (Component->IsA(UStaticMeshComponent::StaticClass()))
+		{
+			UStaticMeshComponent* mesh = Cast<UStaticMeshComponent>(Component);
+			if (mesh && mesh->ComponentHasTag("ChunkBase")) {
+				chunkBase = mesh;
+			}
+		}
+	}
 }
 
 // Called every frame
@@ -23,5 +33,23 @@ void ALevelChunk::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ALevelChunk::GetLength_Implementation(UPARAM(DisplayName = "Chunk Base Length") float& length_out)
+{
+	if (chunkBase != NULL) {
+		length_out = chunkBase->GetComponentScale().Y * 100;
+	}
+	else {
+		length_out = 0.0f;
+	}
+}
+
+FVector ALevelChunk::GetScale()
+{
+	if (chunkBase == NULL) {
+		return FVector(0);
+	}
+	return chunkBase->GetComponentScale() * 50;
 }
 

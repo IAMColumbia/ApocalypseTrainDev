@@ -9,7 +9,10 @@
 /**
  * 
  */
-
+UENUM()
+enum class EGameState : uint8 {
+	traveling UMETA(DisplayName = "traveling"), encounter UMETA(DIsplayName = "encounter"), shopping UMETA(DIsplayName = "shopping")
+};
 
 UCLASS()
 class PROTOTYPE0UNREAL_API UGameManagerWSS : public UWorldSubsystem
@@ -17,6 +20,8 @@ class PROTOTYPE0UNREAL_API UGameManagerWSS : public UWorldSubsystem
 	GENERATED_BODY()
 
 public:
+
+	EGameState CurrentGameState;
 
 	class AChunkSpawner* chunkSpawner;
 	class AEnemySpawner* enemySpawner;
@@ -61,6 +66,15 @@ public:
 	void RestartGame();
 
 	void PlayerJoined();
+
+	UFUNCTION(BlueprintCallable)
+	void ApproachingStation();
+	UFUNCTION(BlueprintCallable)
+	void EnterStation();
+	UFUNCTION(BlueprintCallable)
+	void ExitStation();
+	UFUNCTION(BlueprintCallable)
+	void EnterShop();
 
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

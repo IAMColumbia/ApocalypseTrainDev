@@ -42,7 +42,7 @@ public:
 	UFUNCTION(BLueprintImplementableEvent)
 	void NotifyFuelNormal();
 	
-
+	bool Stopped;
 	void StartTrain();
 	void StopTrain();
 
@@ -65,7 +65,7 @@ public:
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	ETrainState currentState;
+	ETrainState currentTrainState;
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -182,6 +182,8 @@ public:
 	void LeverStateChanged();
 
 	void ToggleTrainState();
+
+	void StartHordeEncounter();
 
 	UFUNCTION(BlueprintCallable)
 	bool AddFuel();
