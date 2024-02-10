@@ -40,7 +40,7 @@ void ATrain::MovementUpdate()
 {
 	switch (currentTrainState) {
 		case ETrainState::stopped:
-			if (!Stopped && !countingDownGameOver) {
+			if (!Stopped) {
 				SetTrainState(ETrainState::accelerating);
 			}
 			break;
@@ -73,6 +73,7 @@ void ATrain::MovementUpdate()
 				else {
 					SetTrainState(ETrainState::stopped);
 					currentTrainSpeed = 0;
+					
 				}
 			}
 			break;

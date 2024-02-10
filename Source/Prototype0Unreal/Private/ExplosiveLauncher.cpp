@@ -10,7 +10,6 @@
 void AExplosiveLauncher::BeginPlay()
 {
 	Super::BeginPlay();
-	FireRate = 1;
 }
 
 void AExplosiveLauncher::Tick(float DeltaTime)

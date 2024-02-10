@@ -189,4 +189,12 @@ void UGameManagerWSS::EnterShop()
 	train->StopTrain();
 }
 
+bool UGameManagerWSS::TrainIsStopped()
+{
+	if (train != NULL) {
+		return train->IsTrainStopped();
+	}
+	return false;
+}
+
 

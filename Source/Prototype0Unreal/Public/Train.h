@@ -93,6 +93,8 @@ public:
 	void NotifyGameOverCounter();
 
 
+	bool IsTrainStopped();
+
 	UPROPERTY(BlueprintReadOnly, Category = "Movement")
 	bool CanMove;
 

@@ -75,6 +75,8 @@ public:
 	void ExitStation();
 	UFUNCTION(BlueprintCallable)
 	void EnterShop();
+	UFUNCTION(BlueprintCallable)
+	bool TrainIsStopped();
 
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
