@@ -417,6 +417,7 @@ void AMyCharacter::DespawnPlayer()
 	if (IsShooting) {
 		ShootReleased();
 	}
+	SetActorLocation(FVector(0, 0, 0));
 	CheckDropItem();
 	justDropped = false;
 	NotifyPlayerDied();

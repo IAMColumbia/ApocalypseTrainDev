@@ -41,19 +41,34 @@ void AEnemySpawner::BeginPlay()
 	EncounterSpawningComplete = true;
 }
 
+bool AEnemySpawner::encounterEnemiesKilled()
+{
+	if (encounterEnemies.Num() > 0) {
+		for (AEnemyCharacter* e : encounterEnemies) {
+			if (e->isSpawned()) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 // Called every frame
 void AEnemySpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	/*if (ZombiesAlive() <= 0 && EncounterSpawningComplete && GetWorld()->GetSubsystem<UGameManagerWSS>()->CurrentGameState == EGameState::encounter) {
-		
-	}*/
+	if (EncounterSpawningComplete && GetWorld()->GetSubsystem<UGameManagerWSS>()->EncounterActive() && encounterEnemiesKilled()) {
+		//GetWorld()->GetSubsystem<UGameManagerWSS>()->EnterStation();
+		GetWorld()->GetSubsystem<UGameManagerWSS>()->waitingForShopEnterDoors = true;
+		encounterEnemies.Empty();
+	}
 }
 
 void AEnemySpawner::StartRearSpawner()
 {
 	if (EncounterSpawningComplete == true) {
 		EncounterSpawningComplete = false;
+		currentEnemiesPerEncounter = enemiesPerEncounter;
 		GetWorld()->GetTimerManager().SetTimer(rearSpawner, this, &AEnemySpawner::SpawnEnemyBehindTrain, RearSpawnRate, true);
 		int chunks = GetWorld()->GetSubsystem<UGameManagerWSS>()->TotalChunksSpawned();
 		RearSpawnRate -= (chunks * SpawnRateIncrease);
@@ -77,14 +92,21 @@ void AEnemySpawner::SpawnEnemies()
 
 void AEnemySpawner::SpawnEnemyBehindTrain()
 {
+	if (ZombiesAlive() == enemyPool.Num() || enemyPool.Num() == 0) {
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OutOfEnemiesToSpawnForEncounter"));
+		StopRearSpawner();
+		return;
+	}
 	FVector spawnLoc = GetWorld()->GetSubsystem<UGameManagerWSS>()->GetRandomLocationBehindTrain();
 	FVector trainLoc = GetWorld()->GetSubsystem<UGameManagerWSS>()->GetTrainLocation();
-	SpawnPooledEnemy(spawnLoc, FRotator().ZeroRotator, true, FVector(400, trainLoc.Y + 500,20));
-	enemiesPerEncounter--;
-	if (enemiesPerEncounter <= 0) {
+	AEnemyCharacter* e = SpawnPooledEnemy(spawnLoc + FVector(0,0,400), FRotator().ZeroRotator, true, FVector(400, trainLoc.Y + 500, 20));
+	if (e != NULL) {
+		encounterEnemies.Add(e);
+	}
+	currentEnemiesPerEncounter--;
+	if (currentEnemiesPerEncounter <= 0) {
 		StopRearSpawner();
 		enemiesPerEncounter += enemiesPerEncounterIncrease;
-		GetWorld()->GetSubsystem<UGameManagerWSS>()->EnterStation();
 	}
 }
 
@@ -100,19 +122,20 @@ void AEnemySpawner::IncreaseEnemyDifficulty()
 	EnemyDamage += EnemyDamageIncrease;
 }
 
-void AEnemySpawner::SpawnPooledEnemy(FVector spawnLocation, FRotator rotation, bool SetTarget, FVector target)
+AEnemyCharacter* AEnemySpawner::SpawnPooledEnemy(FVector spawnLocation, FRotator rotation, bool SetTarget, FVector target)
 {
 	if (enemyPool.IsEmpty()) {
-		return;
+		return NULL;
 	}
 	for (AEnemyCharacter* enemy : enemyPool) {
 		if (enemy != NULL) {
 			if (!enemy->isSpawned()) {
 				enemy->upgradeEnemy(EnemyHealth, EnemyDamage, EnemySpeed);
 				enemy->SpawnPooledCharacter(spawnLocation, rotation, SetTarget, target);
-				break;
+				return enemy;
 			}
 		}
 	}
+	return NULL;
 }
 

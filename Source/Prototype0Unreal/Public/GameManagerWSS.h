@@ -23,6 +23,8 @@ public:
 
 	EGameState CurrentGameState;
 
+	bool EncounterActive();
+
 	class AChunkSpawner* chunkSpawner;
 	class AEnemySpawner* enemySpawner;
 	class ATrain* train;
@@ -77,6 +79,9 @@ public:
 	void EnterShop();
 	UFUNCTION(BlueprintCallable)
 	bool TrainIsStopped();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool waitingForShopEnterDoors;
 
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

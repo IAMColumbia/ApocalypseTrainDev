@@ -49,7 +49,7 @@ void UGameManagerWSS::SpawnNewChunk()
 FVector UGameManagerWSS::GetRandomLocationInChunk(float zoffset)
 {
 	//CHANGE this method to fix spawning issues
-	float edgeNegation = 100;
+
 	//maybe just add the targetYpos to the y value on the vector to keep things in range. Spawnign on the x and z should be fine if just getting values from the mesh
 	if (chunkSpawner == NULL) {
 		return FVector(0, 0, 0);
@@ -57,7 +57,7 @@ FVector UGameManagerWSS::GetRandomLocationInChunk(float zoffset)
 	FVector chunkScale = chunkSpawner->chunkScale;
 	float yOffset = chunkSpawner->nextTargetLocation;
 	float zOffset = zoffset;
-	FVector location = FVector(FMath::RandRange(-chunkScale.X + edgeNegation, chunkScale.X-edgeNegation), FMath::RandRange(-chunkScale.Y + yOffset + edgeNegation, chunkScale.Y + yOffset - edgeNegation), zOffset);
+	FVector location = FVector(FMath::RandRange(-chunkScale.X, chunkScale.X), FMath::RandRange(-chunkScale.Y + yOffset, chunkScale.Y + yOffset), zOffset);
 	//GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Yellow, FString::Printf(TEXT("x: %f y: %f z: %f"), location.X, location.Y, location.Z));
 
 	return location;

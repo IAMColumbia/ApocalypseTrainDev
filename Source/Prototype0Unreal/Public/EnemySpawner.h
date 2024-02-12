@@ -68,15 +68,20 @@ protected:
 	//TQueue<AEnemyCharacter*> objectPool;
 	//void PopulatePool();
 
+	TArray<AEnemyCharacter*> encounterEnemies;
+	bool encounterEnemiesKilled();
+
 	FTimerHandle rearSpawner;
 
 	TArray<AEnemyCharacter*> enemyPool;
 
 public:	
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Encounter")
+	int currentEnemiesPerEncounter;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 	int enemiesPerEncounter = 2;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Encounter")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawning")
 	int enemiesPerEncounterIncrease = 2;
 
 	bool EncounterSpawningComplete;
@@ -97,7 +102,7 @@ public:
 
 	void IncreaseEnemyDifficulty();
 
-	void SpawnPooledEnemy(FVector spawnLocation, FRotator rotation, bool SetTarget, FVector target);
+	AEnemyCharacter* SpawnPooledEnemy(FVector spawnLocation, FRotator rotation, bool SetTarget, FVector target);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemyType")
 	TSubclassOf<AEnemyCharacter> enemyActorClass;
