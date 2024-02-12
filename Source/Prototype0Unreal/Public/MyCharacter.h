@@ -151,6 +151,9 @@ protected:
 	void InteractReleased();
 
 	UFUNCTION(BlueprintImplementableEvent)
+	void NotifyWeaponEquipped(int weaponNum);
+
+	UFUNCTION(BlueprintImplementableEvent)
 	void NotifyHealthBarWidget();
 
 	UFUNCTION(BlueprintImplementableEvent)

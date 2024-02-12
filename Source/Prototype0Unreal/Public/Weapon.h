@@ -17,6 +17,9 @@ public:
 
 	class AMyCharacter* OwnerCharacter;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI")
+	int WeaponNumber;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

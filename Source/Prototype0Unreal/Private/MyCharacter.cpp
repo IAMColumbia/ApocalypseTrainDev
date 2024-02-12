@@ -232,6 +232,7 @@ void AMyCharacter::AttachWeapon()
 	//CurrentWeapon->AttachToActor(this, rules);
 	CurrentWeapon->AttachToComponent(characterMesh, rules, "WeaponSocket");
 	CurrentWeapon->Equipped = true;
+	NotifyWeaponEquipped(CurrentWeapon->WeaponNumber);
 }
 
 void AMyCharacter::HolsterWeapon()

@@ -117,6 +117,7 @@ void AWeapon::WeaponEquipped()
 	if (equipSound) {
 		UGameplayStatics::PlaySoundAtLocation(this, equipSound, GetActorLocation(), 0.3f, 1+ FMath::RandRange(-0.1,0.1),0,attenuation);
 	}
+
 }
 
 void AWeapon::Ray()
