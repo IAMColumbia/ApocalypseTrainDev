@@ -44,11 +44,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int Coins;
 
-	UFUNCTION(BlueprintCallable)
-	void AddCoins(int coinsToAdd);
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void UpdateCoinUI();
+	void AddCoins(int coins);
 
 
 protected:

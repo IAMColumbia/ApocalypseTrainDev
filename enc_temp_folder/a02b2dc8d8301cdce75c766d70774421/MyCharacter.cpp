@@ -223,7 +223,6 @@ void AMyCharacter::CheckDropItem()
 void AMyCharacter::AddCoins(int coins)
 {
 	Coins += coins;
-	UpdateCoinUI();
 }
 
 void AMyCharacter::AttachWeapon()
