@@ -46,6 +46,9 @@ void AShotgunWeapon::Ray()
 						KilledEnemy();
 					}
 				}
+				else {
+					SpawnHitVFXType(hit);
+				}
 				if (AObstacle* obstacle = Cast<AObstacle>(hit.GetActor())) {
 					obstacle->DamageObstacle(Damage);
 				}

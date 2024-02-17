@@ -41,6 +41,15 @@ void ASniper::Ray()
 					}
 					enemiesHit++;
 				}
+				else {
+					int collisions = 3;
+					for (auto h : hits) {
+						collisions--;
+						if (collisions >= 0) {
+						    SpawnHitVFXType(h);
+						}
+					}
+				}
 				if (AObstacle* obstacle = Cast<AObstacle>(hits[i].GetActor())) {
 					obstacle->DamageObstacle(Damage);
 					enemiesHit++;

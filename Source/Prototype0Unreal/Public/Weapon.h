@@ -32,6 +32,8 @@ protected:
 
 	USceneComponent* weaponRotator;
 
+	void SpawnHitVFXType(FHitResult hit);
+
 public:	
 
 	bool Equipped;

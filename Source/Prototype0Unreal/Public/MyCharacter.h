@@ -46,6 +46,7 @@ public:
 
 	void AddCoins(int coins);
 
+
 protected:
 	void AttachWeapon();
 	void HolsterWeapon();
@@ -172,6 +173,10 @@ protected:
 	void SetMovementSpeed(float speed);
 
 public:	
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void NotifyShot();
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool isWeaponUpright();
 

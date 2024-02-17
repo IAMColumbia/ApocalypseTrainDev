@@ -156,8 +156,7 @@ void AWeapon::Ray()
 		
 		//DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.15f, 0.f, 10.f);
 		if (actorHit && hit.GetActor()) {
-			hitLocation = hit.Location;
-			hitNormal = hit.Normal;
+			
 			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetFName().ToString());
 			if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(hit.GetActor())) {
 				if (enemy->TakeDamage(hit.Distance, Damage - FMath::RandRange(0, ((int)(OwnerCharacter->DamageBuff / 2) + 3)) + OwnerCharacter->DamageBuff, GetActorLocation(), KnockbackForce)) {
@@ -165,12 +164,7 @@ void AWeapon::Ray()
 				}
 			}
 			else {
-				if (hit.GetActor()->ActorHasTag("Wooden")) {
-					SpawnBulletVFX(hitLocation, hitNormal, 1);
-				}
-				else {
-					SpawnBulletVFX(hitLocation, hitNormal, 0);
-				}
+				SpawnHitVFXType(hit);
 			}
 			if (AObstacle* obstacle = Cast<AObstacle>(hit.GetActor())) {
 				obstacle->DamageObstacle(Damage);
@@ -285,8 +279,24 @@ void AWeapon::Attack()
 }
 
 void AWeapon::ShootProjectile() {
+	OwnerCharacter->NotifyShot();
 	SpawnProjectile();
 	Ray();
+}
+
+void AWeapon::SpawnHitVFXType(FHitResult hit)
+{
+	hitLocation = hit.Location;
+	hitNormal = hit.Normal;
+	if (hit.GetActor()->ActorHasTag("Fuel")) {
+		return;
+	}
+	if (hit.GetActor()->ActorHasTag("Wooden")) {
+		SpawnBulletVFX(hitLocation, hitNormal, 1);
+	}
+	else {
+		SpawnBulletVFX(hitLocation, hitNormal, 0);
+	}
 }
 
 void AWeapon::EndAttack()
