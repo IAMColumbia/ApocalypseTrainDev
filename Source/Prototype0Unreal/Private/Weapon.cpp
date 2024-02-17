@@ -16,6 +16,14 @@ AWeapon::AWeapon()
 
 }
 
+FVector AWeapon::GetOwnerCharacterLocation()
+{
+	if (OwnerCharacter != NULL) {
+		return OwnerCharacter->GetActorLocation();
+	}
+	return GetActorLocation();
+}
+
 // Called when the game starts or when spawned
 void AWeapon::BeginPlay()
 {
@@ -148,10 +156,20 @@ void AWeapon::Ray()
 		
 		//DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.15f, 0.f, 10.f);
 		if (actorHit && hit.GetActor()) {
+			hitLocation = hit.Location;
+			hitNormal = hit.Normal;
 			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetFName().ToString());
 			if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(hit.GetActor())) {
 				if (enemy->TakeDamage(hit.Distance, Damage - FMath::RandRange(0, ((int)(OwnerCharacter->DamageBuff / 2) + 3)) + OwnerCharacter->DamageBuff, GetActorLocation(), KnockbackForce)) {
 					KilledEnemy();
+				}
+			}
+			else {
+				if (hit.GetActor()->ActorHasTag("Wooden")) {
+					SpawnBulletVFX(hitLocation, hitNormal, 1);
+				}
+				else {
+					SpawnBulletVFX(hitLocation, hitNormal, 0);
 				}
 			}
 			if (AObstacle* obstacle = Cast<AObstacle>(hit.GetActor())) {

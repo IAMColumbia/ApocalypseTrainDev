@@ -15,6 +15,10 @@ class PROTOTYPE0UNREAL_API AProjectile : public APooledActor
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(BlueprintReadOnly)
+	FVector storedHitNormal;
+	UPROPERTY(BlueprintReadOnly)
+	FVector storedHitLocation;
 
 	virtual void Tick(float DeltaTime) override;
 
@@ -32,6 +36,11 @@ public:
 	
 	bool Active;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool Despawning;
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FVector GetOwnerCharacterLocation();
 
 protected:
 	class AWeapon* Owner;

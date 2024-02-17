@@ -17,6 +17,8 @@ public:
 
 	class AMyCharacter* OwnerCharacter;
 
+	FVector GetOwnerCharacterLocation();
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI")
 	int WeaponNumber;
 
@@ -33,6 +35,13 @@ protected:
 public:	
 
 	bool Equipped;
+
+	UPROPERTY(BlueprintReadOnly)
+	FVector hitLocation;
+	UPROPERTY(BlueprintReadOnly)
+	FVector hitNormal;
+	UFUNCTION(BlueprintImplementableEvent)
+	void SpawnBulletVFX(FVector location, FVector normal, int type);
 
 	void RaiseWeapon();
 	void LowerWeapon();

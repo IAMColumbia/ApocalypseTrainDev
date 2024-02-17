@@ -11,6 +11,9 @@ void AProjectile::Tick(float DeltaTime)
 }
 
 void AProjectile::Spawn() {
+	storedHitLocation= Owner->hitLocation;
+	storedHitNormal = Owner->hitNormal;
+	Despawning = false;
 	SetActorRotation(spawnPoint->GetComponentRotation());
 	SetActorLocation(spawnPoint->GetComponentLocation());
 	APooledActor::Spawn();
@@ -40,6 +43,15 @@ void AProjectile::InitializeProjectile(AWeapon* owner)
 }
 
 
+
+FVector AProjectile::GetOwnerCharacterLocation()
+{
+	if (Owner != NULL) {
+		return Owner->GetOwnerCharacterLocation();
+	}
+	//this shouldnt be getting called, just here so editor doesnt crash
+	return GetActorLocation();
+}
 
 void AProjectile::MoveProjectile()
 {
