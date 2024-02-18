@@ -220,6 +220,15 @@ void AMyCharacter::CheckDropItem()
 }
 
 
+void AMyCharacter::LoseCoins(int coinsToLose)
+{
+	Coins -= coinsToLose;
+	if (Coins <= 0) {
+		Coins = 0;
+	}
+	UpdateCoinUI();
+}
+
 void AMyCharacter::AddCoins(int coins)
 {
 	Coins += coins;
@@ -419,10 +428,10 @@ void AMyCharacter::DespawnPlayer()
 	if (IsShooting) {
 		ShootReleased();
 	}
-	SetActorLocation(FVector(0, 0, 0));
 	CheckDropItem();
 	justDropped = false;
 	NotifyPlayerDied();
+	SetActorLocation(FVector(0, 0, 0));
 	TotalDeaths++;
 	MaxHealth = baseHealth;
 	DamageBuff = 0;

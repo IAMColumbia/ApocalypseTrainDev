@@ -41,8 +41,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int TotalDeaths;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int Coins;
+
+	UFUNCTION(BlueprintCallable)
+	void LoseCoins(int coinsToLose);
 
 	UFUNCTION(BlueprintCallable)
 	void AddCoins(int coinsToAdd);

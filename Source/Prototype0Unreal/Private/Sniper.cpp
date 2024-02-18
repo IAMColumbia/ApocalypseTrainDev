@@ -44,10 +44,15 @@ void ASniper::Ray()
 				else {
 					int collisions = 3;
 					for (auto h : hits) {
-						collisions--;
-						if (collisions >= 0) {
-						    SpawnHitVFXType(h);
+						if (Cast<AEnemyCharacter>(hits[i].GetActor())) {
+
 						}
+						else {
+							if (collisions >= 0) {
+								SpawnHitVFXType(h);
+							}
+						}
+						collisions--;
 					}
 				}
 				if (AObstacle* obstacle = Cast<AObstacle>(hits[i].GetActor())) {
