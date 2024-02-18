@@ -22,6 +22,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI")
 	int WeaponNumber;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool IsOwnerDead();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -119,4 +122,11 @@ public:
 	FQuat OriginalRotation;
 	bool upright;
 	bool Clipping();
+
+	bool prevAttackState;
+	UFUNCTION(BlueprintImplementableEvent)
+	void NotifyStoppedShooting();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OwnerDied();
 };

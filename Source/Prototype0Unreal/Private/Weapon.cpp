@@ -24,6 +24,14 @@ FVector AWeapon::GetOwnerCharacterLocation()
 	return GetActorLocation();
 }
 
+bool AWeapon::IsOwnerDead()
+{
+	if (OwnerCharacter->IsPlayerDead) {
+		return true;
+	}
+	return false;
+}
+
 // Called when the game starts or when spawned
 void AWeapon::BeginPlay()
 {
@@ -187,6 +195,13 @@ void AWeapon::UpdateReloadTime()
 
 void AWeapon::CheckForAttack()
 {
+	if (prevAttackState && !Attacking) {
+		NotifyStoppedShooting();
+	}
+	prevAttackState = Attacking;
+	if (IsOwnerDead()) {
+		return;
+	}
 	if (Attacking && Reloaded) {
 		if (!Clipping()) {
 			NotifyFiredShot();
@@ -195,6 +210,7 @@ void AWeapon::CheckForAttack()
 			GetWorld()->GetTimerManager().SetTimer(reloadTimerHandle, this, &AWeapon::Reload, FireRate, false);
 		}
 	}
+	
 }
 
 void AWeapon::Reload()

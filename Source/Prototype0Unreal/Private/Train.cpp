@@ -10,6 +10,7 @@
 #include "Obstacle.h"
 #include "MyCharacter.h"
 #include <Internationalization/Text.h>
+#include "InteractableActor.h"
 
 // Sets default values
 ATrain::ATrain()
@@ -334,7 +335,11 @@ void ATrain::OnPlowBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 		player->LaunchCharacter(GetActorRightVector() * playerLaunchForce, true, true);
 	}
 	if (OtherActor->Tags.Contains("Fuel")) {
-		OtherActor->Destroy();
+		if (AInteractableActor* f = Cast<AInteractableActor>(OtherActor)) {
+			if (f->state != EInteractableState::Carried) {
+				OtherActor->Destroy();
+			}
+		}
 	}
 	if (OtherActor->Tags.Contains("Obstacle")) {
 		currentTrainSpeed *= -1;
