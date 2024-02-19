@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "ProjectileShooter.h"
 #include "Weapon.generated.h"
 
 UCLASS()
-class PROTOTYPE0UNREAL_API AWeapon : public AActor
+class PROTOTYPE0UNREAL_API AWeapon : public AActor, public IProjectileShooter
 {
 	GENERATED_BODY()
 	
@@ -17,7 +18,7 @@ public:
 
 	class AMyCharacter* OwnerCharacter;
 
-	FVector GetOwnerCharacterLocation();
+	virtual FVector GetOwnerActorLocation() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI")
 	int WeaponNumber;
@@ -28,7 +29,7 @@ protected:
 	FTimerHandle shootTimerHandle;
 	FTimerHandle reloadTimerHandle;
 
-	virtual void ShootProjectile();
+	virtual void ShootProjectile() override;
 
 	USceneComponent* weaponRotator;
 
@@ -86,7 +87,7 @@ public:
 
 	void WeaponEquipped();
 
-	virtual void Ray();
+	virtual void Ray() override;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int OwnerPlayerIndex();
@@ -119,4 +120,6 @@ public:
 	FQuat OriginalRotation;
 	bool upright;
 	bool Clipping();
+
+	virtual USceneComponent* GetBulletSpawn() override;
 };

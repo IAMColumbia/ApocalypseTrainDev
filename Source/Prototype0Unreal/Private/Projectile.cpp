@@ -2,6 +2,7 @@
 
 
 #include "Projectile.h"
+#include "ProjectileShooter.h"
 #include "Weapon.h"
 
 void AProjectile::Tick(float DeltaTime)
@@ -11,14 +12,17 @@ void AProjectile::Tick(float DeltaTime)
 }
 
 void AProjectile::Spawn() {
-	storedHitLocation= Owner->hitLocation;
-	storedHitNormal = Owner->hitNormal;
-	Despawning = false;
-	SetActorRotation(spawnPoint->GetComponentRotation());
-	SetActorLocation(spawnPoint->GetComponentLocation());
-	APooledActor::Spawn();
-	GetWorld()->GetTimerManager().SetTimer(lifetimeHandle, this, &APooledActor::Despawn, Lifetime, false);
-	Active = true;
+	if (Cast<AWeapon>(Owner))
+	{
+		storedHitLocation = Cast<AWeapon>(Owner)->hitLocation;
+		storedHitNormal = Cast<AWeapon>(Owner)->hitNormal;
+	}
+		Despawning = false;
+		SetActorRotation(spawnPoint->GetComponentRotation());
+		SetActorLocation(spawnPoint->GetComponentLocation());
+		APooledActor::Spawn();
+		GetWorld()->GetTimerManager().SetTimer(lifetimeHandle, this, &APooledActor::Despawn, Lifetime, false);
+		Active = true;
 }
 
 void AProjectile::SpawnWithRotation(FRotator rot)
@@ -36,10 +40,10 @@ void AProjectile::Despawn()
 	APooledActor::Despawn();
 }
 
-void AProjectile::InitializeProjectile(AWeapon* owner)
+void AProjectile::InitializeProjectile(IProjectileShooter* owner)
 {
 	Owner = owner;
-	spawnPoint = Owner->BulletSpawn;
+	spawnPoint = Owner->GetBulletSpawn();
 }
 
 
@@ -47,7 +51,7 @@ void AProjectile::InitializeProjectile(AWeapon* owner)
 FVector AProjectile::GetOwnerCharacterLocation()
 {
 	if (Owner != NULL) {
-		return Owner->GetOwnerCharacterLocation();
+		return Owner->GetOwnerActorLocation();
 	}
 	//this shouldnt be getting called, just here so editor doesnt crash
 	return GetActorLocation();

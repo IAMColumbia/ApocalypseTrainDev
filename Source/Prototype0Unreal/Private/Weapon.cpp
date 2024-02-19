@@ -16,7 +16,7 @@ AWeapon::AWeapon()
 
 }
 
-FVector AWeapon::GetOwnerCharacterLocation()
+FVector AWeapon::GetOwnerActorLocation()
 {
 	if (OwnerCharacter != NULL) {
 		return OwnerCharacter->GetActorLocation();
@@ -270,6 +270,11 @@ bool AWeapon::Clipping()
 		}
 	}
 	return false;
+}
+
+USceneComponent* AWeapon::GetBulletSpawn()
+{
+	return BulletSpawn;
 }
 
 

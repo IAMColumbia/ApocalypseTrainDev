@@ -27,7 +27,7 @@ public:
 	virtual void SpawnWithRotation(FRotator rot);
 	UFUNCTION(BlueprintCallable)
 	virtual void Despawn() override;
-	virtual void InitializeProjectile(class AWeapon* owner);
+	virtual void InitializeProjectile(class IProjectileShooter* owner);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	float Lifetime;
@@ -43,7 +43,7 @@ public:
 	FVector GetOwnerCharacterLocation();
 
 protected:
-	class AWeapon* Owner;
+	class IProjectileShooter* Owner;
 	USceneComponent* spawnPoint;
 	FTimerHandle lifetimeHandle;
 
