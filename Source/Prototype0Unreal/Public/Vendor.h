@@ -26,4 +26,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPurchase();
+
+	UPROPERTY(BlueprintReadWrite)
+	bool Dispensing;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int CostOfItem;
+
 };

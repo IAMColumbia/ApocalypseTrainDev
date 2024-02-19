@@ -2,6 +2,7 @@
 
 
 #include "Vendor.h"
+#include "MyCharacter.h"
 
 // Sets default values
 AVendor::AVendor()
@@ -20,7 +21,17 @@ void AVendor::BeginPlay()
 
 void AVendor::OnInteract(AMyCharacter* player)
 {
+	if (player->Carrying) {
+		return;
+	}
+	if (!Dispensing) {
+		if (player->Coins >= CostOfItem) {
+			OnPurchase();
+			Dispensing = true;
+			player->LoseCoins(CostOfItem);
 
+		}
+	}
 }
 
 // Called every frame

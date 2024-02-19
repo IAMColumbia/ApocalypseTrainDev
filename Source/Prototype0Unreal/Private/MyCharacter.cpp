@@ -341,6 +341,7 @@ void AMyCharacter::ShootReleased() {
 	IsShooting = false;
 	NotifyStoppedShooting();
 	CurrentWeapon->EndAttack();
+	
 }
 
 void AMyCharacter::DashPressed()
@@ -431,6 +432,7 @@ void AMyCharacter::DespawnPlayer()
 	CheckDropItem();
 	justDropped = false;
 	NotifyPlayerDied();
+	
 	SetActorLocation(FVector(0, 0, 0));
 	TotalDeaths++;
 	MaxHealth = baseHealth;
@@ -460,6 +462,7 @@ void AMyCharacter::UpdateRespawnTimer()
 }
 
 void AMyCharacter::ResetPlayer() {
+	CurrentWeapon->OwnerDied();
 	SetActorLocation(trainPtr->GetRespawnPos(PlayerIndex));
 	Invincible = true;
 	currentHealth = MaxHealth;
