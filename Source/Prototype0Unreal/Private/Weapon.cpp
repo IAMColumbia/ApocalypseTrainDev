@@ -324,4 +324,3 @@ void AWeapon::EndAttack()
 {
 	Attacking = false;
 }
-
