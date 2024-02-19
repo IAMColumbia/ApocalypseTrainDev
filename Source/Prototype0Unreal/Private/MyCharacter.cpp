@@ -432,7 +432,6 @@ void AMyCharacter::DespawnPlayer()
 	CheckDropItem();
 	justDropped = false;
 	NotifyPlayerDied();
-	
 	SetActorLocation(FVector(0, 0, 0));
 	TotalDeaths++;
 	MaxHealth = baseHealth;

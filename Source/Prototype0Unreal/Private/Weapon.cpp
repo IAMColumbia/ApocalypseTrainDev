@@ -199,9 +199,6 @@ void AWeapon::CheckForAttack()
 		NotifyStoppedShooting();
 	}
 	prevAttackState = Attacking;
-	if (IsOwnerDead()) {
-		return;
-	}
 	if (Attacking && Reloaded) {
 		if (!Clipping()) {
 			NotifyFiredShot();
@@ -309,9 +306,9 @@ void AWeapon::SpawnHitVFXType(FHitResult hit)
 {
 	hitLocation = hit.Location;
 	hitNormal = hit.Normal;
-	if (hit.GetActor()->ActorHasTag("Fuel")) {
+	/*if (hit.GetActor()->ActorHasTag("Fuel")) {
 		return;
-	}
+	}*/
 	if (hit.GetActor()->ActorHasTag("Wooden")) {
 		SpawnBulletVFX(hitLocation, hitNormal, 1);
 	}
