@@ -30,6 +30,8 @@ public:
 	// Sets default values for this actor's properties
 	ATrain();
 
+	
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ELeverState leverState;
 
@@ -62,7 +64,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Movement")
 	float DecelerationRate;
 
+	FVector GetDeadPlayerHolderLocation();
+
 protected:
+
+	UBoxComponent* deadPlayerHolder;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ETrainState currentTrainState;

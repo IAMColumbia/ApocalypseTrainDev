@@ -432,7 +432,7 @@ void AMyCharacter::DespawnPlayer()
 	CheckDropItem();
 	justDropped = false;
 	NotifyPlayerDied();
-	SetActorLocation(FVector(0, 0, 0));
+	SetActorLocation(trainPtr->GetDeadPlayerHolderLocation());
 	TotalDeaths++;
 	MaxHealth = baseHealth;
 	DamageBuff = 0;
@@ -465,11 +465,11 @@ void AMyCharacter::ResetPlayer() {
 	SetActorLocation(trainPtr->GetRespawnPos(PlayerIndex));
 	Invincible = true;
 	currentHealth = MaxHealth;
-	IsPlayerDead = false;
 	NotifyHealthBarWidget();
 	NotifyPlayerRespawn();
 	trainPtr->StopRespawnTimer(PlayerIndex, 0);
 	GetWorld()->GetTimerManager().SetTimer(respawnTimerHandle, this, &AMyCharacter::SetInvincibility, 3, false);
+	IsPlayerDead = false;
 }
 
 FVector AMyCharacter::GetRespawnLocation()

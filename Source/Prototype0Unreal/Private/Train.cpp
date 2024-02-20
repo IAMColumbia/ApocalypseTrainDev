@@ -93,6 +93,14 @@ bool ATrain::HasFuel()
 	return false;
 }
 
+FVector ATrain::GetDeadPlayerHolderLocation()
+{
+	if (deadPlayerHolder != NULL) {
+		return deadPlayerHolder->GetComponentLocation() + FVector( 0,0,100);
+	}
+	return FVector(0, 0, 0);
+}
+
 // Called when the game starts or when spawned
 void ATrain::BeginPlay()
 {
@@ -118,6 +126,10 @@ void ATrain::BeginPlay()
 			if (BoxCollisionComponent && BoxCollisionComponent->ComponentHasTag("startBox"))
 			{
 				leverBox = BoxCollisionComponent;
+			}
+			if (BoxCollisionComponent && BoxCollisionComponent->ComponentHasTag("DeadPlayerHolder"))
+			{
+				deadPlayerHolder = BoxCollisionComponent;
 			}
 		}
 		if (Component->IsA(UStaticMeshComponent::StaticClass())) {
