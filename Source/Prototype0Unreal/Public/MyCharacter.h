@@ -55,6 +55,9 @@ public:
 
 
 protected:
+
+	void CheckForEnemyShowHealth();
+
 	void AttachWeapon();
 	void HolsterWeapon();
 
@@ -251,7 +254,7 @@ public:
 	bool HasFuel();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void ApplyUpgrade(EUpgradeType upgrade,float amount);
+	void ApplyUpgrade(EUpgradeType upgrade, float amount);
 
 	UFUNCTION(BlueprintCallable)
 	void Heal();

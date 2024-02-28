@@ -44,10 +44,11 @@ void AInteractableActor::CheckForInteractPressed()
 	if (wasInteracted) {
 		return;
 	}
-	for(AMyCharacter * player : overlappingPlayers) {
-		if (player->Interacted && !player->justDropped) {
+	for(AMyCharacter* player : overlappingPlayers) {
+		if (player->Interacted) {
 			OnInteract(player);
-			
+			//Figure out why player index not working
+			//GEngine.AddOnScreenMessage()
 		}
 	}
 }

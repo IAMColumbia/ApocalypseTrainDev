@@ -40,6 +40,8 @@ protected:
 
 public:
 
+    void GetRay(FVector*& rayStart, FVector*& rayEnd);
+
     bool Equipped;
 
     UPROPERTY(BlueprintReadOnly)

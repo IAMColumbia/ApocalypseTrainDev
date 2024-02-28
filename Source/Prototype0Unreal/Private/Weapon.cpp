@@ -136,13 +136,8 @@ void AWeapon::WeaponEquipped()
 
 }
 
-void AWeapon::Ray()
-{
-	if (BulletSpawn == NULL) {
-		return;
-	}
+void AWeapon::GetRay(FVector*& rayStart, FVector*& rayEnd) {
 	FVector start = GetActorLocation();
-
 	//FVector forward = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(characterMesh->GetRightVector(), 0.8);
 	//FVector forward = OwnerCharacter->characterMesh->GetRightVector();
 	FVector forward = BulletSpawn->GetForwardVector();
@@ -151,6 +146,28 @@ void AWeapon::Ray()
 	start = FVector(start.X + (forward.X * RayOffset), start.Y + (forward.Y * RayOffset), start.Z + (forward.Z * RayOffset));
 	//maybe need to change end pos for randomness
 	FVector end = start + forward * RayLength;
+	rayStart = &start;
+	rayEnd = &end;
+}
+
+void AWeapon::Ray()
+{
+	if (BulletSpawn == NULL) {
+		return;
+	}
+	//FVector start = GetActorLocation();
+
+	////FVector forward = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(characterMesh->GetRightVector(), 0.8);
+	////FVector forward = OwnerCharacter->characterMesh->GetRightVector();
+	//FVector forward = BulletSpawn->GetForwardVector();
+	//forward.Z = 0;
+
+	//start = FVector(start.X + (forward.X * RayOffset), start.Y + (forward.Y * RayOffset), start.Z + (forward.Z * RayOffset));
+	////maybe need to change end pos for randomness
+	//FVector end = start + forward * RayLength;
+	FVector* start;
+	FVector* end;
+	GetRay(start, end);
 
 	FHitResult hit;
 
@@ -159,7 +176,7 @@ void AWeapon::Ray()
 		FCollisionQueryParams QueryParams;
 		QueryParams.AddIgnoredActor(this);
 		QueryParams.AddIgnoredActor(OwnerCharacter);
-		bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, QueryParams, FCollisionResponseParams());
+		bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, *start, *end, ECC_Pawn, QueryParams, FCollisionResponseParams());
 		//NotifyFiredShot(OwnerCharacter->GetActorRightVector());
 		
 		//DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.15f, 0.f, 10.f);

@@ -26,10 +26,9 @@ void AVendor::OnInteract(AMyCharacter* player)
 	}
 	if (!Dispensing) {
 		if (player->Coins >= CostOfItem) {
-			OnPurchase();
 			Dispensing = true;
+			OnPurchase();
 			player->LoseCoins(CostOfItem);
-
 		}
 	}
 }

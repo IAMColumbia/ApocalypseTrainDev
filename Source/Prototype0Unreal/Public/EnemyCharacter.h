@@ -17,6 +17,12 @@ class PROTOTYPE0UNREAL_API AEnemyCharacter : public APooledCharacter
 	GENERATED_BODY()
 
 public:
+
+	bool InViewOfPlayer;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void NotifyInViewOfPlayer();
+
 	// Sets default values for this character's properties
 	AEnemyCharacter();
 

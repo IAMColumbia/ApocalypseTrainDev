@@ -86,7 +86,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Bounds")
 	float FrontBound;
 
+	TArray<USceneComponent*> EncounterSpawnPoints;
+
 public:
+
+	FVector GetRandomEncounterSpawnPos();
 
 	bool countingDownGameOver;
 	FTimerHandle countdown;

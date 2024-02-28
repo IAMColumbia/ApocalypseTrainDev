@@ -15,6 +15,8 @@ class PROTOTYPE0UNREAL_API AStatVendor : public AVendor
 	
 
 protected:
+
+	virtual void BeginPlay() override;
 	
 	virtual void OnInteract(AMyCharacter* player) override;
 
@@ -24,8 +26,8 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	EUpgradeType upgradeType;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	int UpgradeAmount;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float UpgradeAmount;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void PurchasedUpgrade(const FText& textToDisplay, FVector color);

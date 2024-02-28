@@ -138,6 +138,12 @@ void ATrain::BeginPlay()
 				startLeverMesh = mesh;
 			}
 		}
+		if (Component->IsA(USceneComponent::StaticClass())) {
+			USceneComponent* point = Cast<USceneComponent>(Component);
+			if (point && point->ComponentHasTag("EncounterSpawnPoint")) {
+				EncounterSpawnPoints.Add(point);
+			}
+		}
 	}
 	
 }
@@ -282,6 +288,17 @@ void ATrain::UpdateFuelState()
 			countingDownGameOver = false;
 		}
 	}
+}
+
+FVector ATrain::GetRandomEncounterSpawnPos()
+{
+	if (EncounterSpawnPoints.Num() > 0) {
+		int num = FMath::RandRange(0, EncounterSpawnPoints.Num() - 1);
+		return EncounterSpawnPoints[num]->GetComponentLocation();
+	}
+	FVector loc = FVector(-40, 0, 250);
+	loc.Y = GetBackBound() + 500;
+	return loc;
 }
 
 void ATrain::DecrementGameOverCounter()

@@ -65,9 +65,7 @@ FVector UGameManagerWSS::GetRandomLocationInChunk(float zoffset)
 
 FVector UGameManagerWSS::GetRandomLocationBehindTrain()
 {
-	FVector loc = FVector(-40, 0, 250);//GetRandomLocationInChunk(100); 
-	loc.Y = train->GetBackBound() + 500;
-	return loc;
+	return train->GetRandomEncounterSpawnPos();
 }
 
 FVector UGameManagerWSS::GetTrainLocation()

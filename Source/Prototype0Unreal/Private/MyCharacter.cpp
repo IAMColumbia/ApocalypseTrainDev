@@ -235,6 +235,25 @@ void AMyCharacter::AddCoins(int coins)
 	UpdateCoinUI();
 }
 
+void AMyCharacter::CheckForEnemyShowHealth()
+{
+	FVector* start;
+	FVector* end;
+	CurrentWeapon->GetRay(start, end);
+	FHitResult hit;
+	if (GetWorld()) {
+		FCollisionQueryParams QueryParams;
+		QueryParams.AddIgnoredActor(this);
+		QueryParams.AddIgnoredActor(CurrentWeapon);
+		bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, *start, *end, ECC_Pawn, QueryParams, FCollisionResponseParams());
+		if (actorHit && hit.GetActor()) {
+			if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(hit.GetActor())) {
+				enemy->InViewOfPlayer = true;
+			}
+		}
+	}
+}
+
 void AMyCharacter::AttachWeapon()
 {
 	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
@@ -501,6 +520,7 @@ void AMyCharacter::RegenerateHealth()
 		currentHealth = MaxHealth;
 	}
 }
+
 void AMyCharacter::Heal() {
 	currentHealth = MaxHealth;
 }

@@ -76,6 +76,9 @@ void AEnemyCharacter::Tick(float DeltaTime)
 			ApplyKnockback();
 			break;
 	}
+	if (InViewOfPlayer) {
+		NotifyInViewOfPlayer();
+	}
 }
 
 // Called to bind functionality to input
