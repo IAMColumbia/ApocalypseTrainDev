@@ -88,18 +88,18 @@ void ALootBox::OnInteract(AMyCharacter* player)
 	int random = (int)FMath::FRandRange(0, (float)StaticEnum<EUpgradeType>()->GetMaxEnumValue());
 	EUpgradeType upgrade = (EUpgradeType)random;
 	float amount = UpgradeAmount;
-	amount += GetWorld()->GetSubsystem<UGameManagerWSS>()->TotalChunksSpawned();
+	//amount += GetWorld()->GetSubsystem<UGameManagerWSS>()->TotalChunksSpawned();
 	switch (random) {
 	case 0:
 		player->ApplyUpgrade(upgrade, amount);
 		Interacted(getUpgradeText(amount, upgrade), player->PlayerColor);
 		break;
 	case 1:
-		player->ApplyUpgrade(upgrade, 20);
+		player->ApplyUpgrade(upgrade, amount * 4);
 		Interacted(getUpgradeText(20, upgrade), player->PlayerColor);
 		break;
 	case 2:
-		player->ApplyUpgrade(upgrade, 15);
+		player->ApplyUpgrade(upgrade, amount * 3);
 		Interacted(getUpgradeText(15, upgrade), player->PlayerColor);
 		break;
 	}
