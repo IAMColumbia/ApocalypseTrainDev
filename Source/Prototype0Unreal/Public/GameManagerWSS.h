@@ -83,6 +83,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool waitingForShopEnterDoors;
 
+	float GetPriceInflation();
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	

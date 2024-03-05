@@ -8,6 +8,7 @@
 
 class UPlayerWeapon;
 class AWeapon;
+class AMeleeWeapon;
 
 UENUM(BlueprintType)
 enum class EUpgradeType : uint8{damage UMETA(DisplayName="Damage"), health UMETA(DisplayName = "Health"), speed UMETA(DisplayName = "Speed")
@@ -53,6 +54,11 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void UpdateCoinUI();
 
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
+	bool Bashing;
+
+	UFUNCTION(BlueprintCallable)
+	void BashFinished();
 
 protected:
 
@@ -60,6 +66,9 @@ protected:
 
 	void AttachWeapon();
 	void HolsterWeapon();
+
+	void HolsterMeleeWeapon();
+	void AttachMeleeWeapon();
 
 	class UGameManagerWSS* gameManager;
 	class ATrain* trainPtr;
@@ -72,6 +81,11 @@ protected:
 	class AWeapon* CurrentWeapon;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	TSubclassOf<AWeapon> DefaultWeapon;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
+	TSubclassOf<AMeleeWeapon> MeleeWeapon;
+
+	AMeleeWeapon* CurrentMeleeWeapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Combat")
 	bool IsShooting;
@@ -157,6 +171,10 @@ protected:
 	void ShootReleased();
 
 	void DashPressed();
+
+	void BashPressed();
+
+	
 
 	void InteractPressed();
 	void InteractReleased();

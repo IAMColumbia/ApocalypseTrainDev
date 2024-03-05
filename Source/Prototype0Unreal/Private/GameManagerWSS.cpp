@@ -7,6 +7,11 @@
 #include "EnemySpawner.h"
 #include <Kismet/GameplayStatics.h>
 
+float UGameManagerWSS::GetPriceInflation()
+{
+	return enemySpawner->PriceInflation;
+}
+
 void UGameManagerWSS::Initialize(FSubsystemCollectionBase& Collection) {
 	Super::Initialize(Collection);
 	UE_LOG(LogTemp, Warning, TEXT("GameManager Initialized"));
@@ -35,7 +40,7 @@ void UGameManagerWSS::SpawnNewChunk()
 	TotalMeters = train->TotalMeters;
 	if (train->CanMove && chunkSpawner->TotalChunksSpawned >= 0) {
 		if (TotalMeters % enemySpawner->DifficultyIncrease == 0 && TotalMeters > 2) {
-			enemySpawner->IncreaseEnemyDifficulty();
+			enemySpawner->EnemiesPerChunk++;
 		}
 		enemySpawner->SpawnEnemies();
 	}
@@ -178,6 +183,8 @@ void UGameManagerWSS::EnterStation()
 		CurrentGameState = EGameState::traveling;
 		train->StartTrain();
 		train->Stopped = false;
+		enemySpawner->IncreaseEnemyDifficulty();
+
 	}
 }
 
@@ -187,6 +194,7 @@ void UGameManagerWSS::ExitStation()
 		CurrentGameState = EGameState::traveling;
 		train->Stopped = false;
 		train->StartTrain();
+
 	}
 }
 

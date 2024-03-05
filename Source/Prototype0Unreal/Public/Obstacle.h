@@ -32,4 +32,7 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void NotifyDamageObstacle();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void ObstacleDestroyed();
 };

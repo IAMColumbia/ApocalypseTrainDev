@@ -87,7 +87,6 @@ void AEnemySpawner::SpawnEnemies()
 		FVector spawnLocation = GetWorld()->GetSubsystem<UGameManagerWSS>()->GetRandomLocationInChunk(100);
 		SpawnPooledEnemy(spawnLocation, FRotator(0, 0, (float)FMath::RandRange(0, 180)), false, FVector());
 	}
-	EnemiesPerChunk++;
 }
 
 void AEnemySpawner::SpawnEnemyBehindTrain()

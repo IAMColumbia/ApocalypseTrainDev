@@ -14,6 +14,7 @@
 #include <InteractableActor.h>
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Weapon.h"
+#include "MeleeWeapon.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -89,6 +90,8 @@ void AMyCharacter::BeginPlay()
 	CurrentWeapon = Cast<AWeapon>(GetWorld()->SpawnActor(DefaultWeapon));
 	CurrentWeapon->OwnerCharacter = this;
 	AttachWeapon();
+	CurrentMeleeWeapon = Cast<AMeleeWeapon>(GetWorld()->SpawnActor(MeleeWeapon));
+	HolsterMeleeWeapon();
 	
 }
 
@@ -104,8 +107,6 @@ void AMyCharacter::OnPlayerSpawn() {
 	else {
 		UE_LOG(LogTemp, Warning, TEXT("Train ptr is null in Character"));
 	}
-	
-	
 }
 
 
@@ -145,6 +146,7 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Pressed, this, &AMyCharacter::InteractPressed);
 	PlayerInputComponent->BindAction("Interact", EInputEvent::IE_Released, this, &AMyCharacter::InteractReleased);
 	PlayerInputComponent->BindAction("Dash", EInputEvent::IE_Pressed, this, &AMyCharacter::DashPressed);
+	PlayerInputComponent->BindAction("Bash", EInputEvent::IE_Pressed, this, &AMyCharacter::BashPressed);
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyCharacter::MoveRight);
 	PlayerInputComponent->BindAxis("AimHorizontal", this, &AMyCharacter::setXRot);
@@ -154,17 +156,19 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 
 void AMyCharacter::InteractPressed() {
-	Interacted = true;
-	if (trainPtr != NULL) {
-		if (trainPtr->IsOverlappingFuelBox(GetActorLocation()) && Carrying && carriedObject->ActorHasTag("Fuel")) {
-			if (carriedObject != NULL) {
-				if (trainPtr->AddFuel()) {
-					carriedObject->Destroy();
+	if (!Bashing) {
+		Interacted = true;
+		if (trainPtr != NULL) {
+			if (trainPtr->IsOverlappingFuelBox(GetActorLocation()) && Carrying && carriedObject->ActorHasTag("Fuel")) {
+				if (carriedObject != NULL) {
+					if (trainPtr->AddFuel()) {
+						carriedObject->Destroy();
+					}
 				}
 			}
-		}
-		if (trainPtr->IsOverlappingLeverBox(GetActorLocation()) && !Carrying) {
-			trainPtr->ToggleTrainState();
+			if (trainPtr->IsOverlappingLeverBox(GetActorLocation()) && !Carrying) {
+				trainPtr->ToggleTrainState();
+			}
 		}
 	}
 	CheckDropItem();
@@ -213,8 +217,7 @@ void AMyCharacter::CheckDropItem()
 		}
 		Carrying = false;
 		AttachWeapon();
-		CurrentWeapon->WeaponEquipped();
-		CurrentWeapon->ShowLaser();
+		
 		justDropped = true;
 	}
 }
@@ -262,6 +265,8 @@ void AMyCharacter::AttachWeapon()
 	CurrentWeapon->AttachToComponent(characterMesh, rules, "WeaponSocket");
 	CurrentWeapon->Equipped = true;
 	NotifyWeaponEquipped(CurrentWeapon->WeaponNumber);
+	CurrentWeapon->WeaponEquipped();
+	CurrentWeapon->ShowLaser();
 }
 
 void AMyCharacter::HolsterWeapon()
@@ -274,6 +279,21 @@ void AMyCharacter::HolsterWeapon()
 	//CurrentWeapon->AttachToActor(this, rules);
 	CurrentWeapon->AttachToComponent(HolsterSlot, rules);
 	CurrentWeapon->HideLaser();
+}
+
+void AMyCharacter::HolsterMeleeWeapon()
+{
+	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true);
+	CurrentMeleeWeapon->SetActorLocation(HolsterSlot->GetComponentLocation());
+	CurrentMeleeWeapon->SetActorRotation(HolsterSlot->GetComponentRotation());
+	CurrentMeleeWeapon->AttachToComponent(HolsterSlot, rules);
+}
+
+void AMyCharacter::AttachMeleeWeapon()
+{
+	FAttachmentTransformRules rules = FAttachmentTransformRules(EAttachmentRule::SnapToTarget, EAttachmentRule::KeepRelative, EAttachmentRule::KeepWorld, true);
+	CurrentMeleeWeapon->SetActorLocation(characterMesh->GetSocketTransform("MeleeSocket").GetLocation());
+	CurrentMeleeWeapon->AttachToComponent(characterMesh, rules, "MeleeSocket");
 }
 
 TSubclassOf<AWeapon> AMyCharacter::PickupWeapon(TSubclassOf<AWeapon> weaponToPickup)
@@ -345,7 +365,7 @@ void AMyCharacter::MoveForward(float AxisValue) {
 #pragma region Shooting
 
 void AMyCharacter::ShootPressed() {
-	if (Carrying) {
+	if (Carrying || Bashing) {
 		return;
 	}
 	if (CurrentWeapon == NULL) {
@@ -384,6 +404,35 @@ void AMyCharacter::DashPressed()
 		}
 	}
 }
+
+void AMyCharacter::BashPressed()
+{
+	if (!Carrying && !Bashing) {
+		ShootReleased();
+		FRotator Rot = GetActorRotation();
+		Rot.Pitch -= 90.0f;
+		CurrentMeleeWeapon->SetActorRelativeRotation(Rot);
+		Bashing = true;
+		HolsterWeapon();
+		AttachMeleeWeapon();
+		CurrentMeleeWeapon->CanDamage = true;
+		CurrentMeleeWeapon->Attacking();
+	}
+}
+
+
+void AMyCharacter::BashFinished()
+{
+	CurrentMeleeWeapon->CanDamage = false;
+	CurrentMeleeWeapon->Idle();
+	FRotator Rot = GetActorRotation();
+	Rot.Pitch += 90.0f;
+	CurrentMeleeWeapon->SetActorRelativeRotation(Rot);
+	AttachWeapon();
+	HolsterMeleeWeapon();
+	Bashing = false;
+}
+
 
 void AMyCharacter::ApplyDash()
 {

@@ -31,7 +31,8 @@ void AObstacle::DamageObstacle(float damage)
 	NotifyDamageObstacle();
 	//GEngine->AddOnScreenDebugMessage(1, 3, FColor::Red, FString::Printf(TEXT("TRAIN HIT OBSTACLE % f"), currentHealth));
 	if (currentHealth <= 0) {
-		AActor::Destroy();
+		//AActor::Destroy();
+		ObstacleDestroyed();
 	}
 }
 

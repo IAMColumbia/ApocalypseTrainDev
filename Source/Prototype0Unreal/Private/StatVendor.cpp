@@ -3,15 +3,22 @@
 
 #include "StatVendor.h"
 #include "MyCharacter.h"
+#include "GameManagerWSS.h"
 
 FText AStatVendor::getUpgradeText(float value, EUpgradeType type)
 {
 	return FText::Format(INVTEXT("+{0} {1}"), value, StaticEnum<EUpgradeType>()->GetDisplayNameTextByValue((uint64)type));
 }
 
+FText AStatVendor::getInfoText()
+{
+	return FText::Format(INVTEXT("{0} - {1}"), CostOfItem, StaticEnum<EUpgradeType>()->GetDisplayNameTextByValue((uint64)upgradeType));
+}
+
 void AStatVendor::BeginPlay()
 {
 	Super::BeginPlay();
+	CostOfItem = CostOfItem + GetWorld()->GetSubsystem<UGameManagerWSS>()->GetPriceInflation();
 }
 
 void AStatVendor::OnInteract(AMyCharacter* player)

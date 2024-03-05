@@ -33,5 +33,8 @@ public:
 	void PurchasedUpgrade(const FText& textToDisplay, FVector color);
 
 	FText getUpgradeText(float value, EUpgradeType type);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	FText getInfoText();
 };
 
