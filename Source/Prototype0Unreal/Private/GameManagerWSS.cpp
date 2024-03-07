@@ -12,6 +12,13 @@ float UGameManagerWSS::GetPriceInflation()
 	return enemySpawner->PriceInflation;
 }
 
+void UGameManagerWSS::EnemyKilled()
+{
+	enemySpawner->enemiesKilledThisEncounter++;
+	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString::Printf(TEXT("%d killed out of %d"), enemySpawner->enemiesKilledThisEncounter, enemySpawner->enemiesPerEncounter));
+	enemySpawner->DisplayKillCounter(enemySpawner->enemiesPerEncounter - enemySpawner->enemiesKilledThisEncounter);
+}
+
 void UGameManagerWSS::Initialize(FSubsystemCollectionBase& Collection) {
 	Super::Initialize(Collection);
 	UE_LOG(LogTemp, Warning, TEXT("GameManager Initialized"));
@@ -184,7 +191,7 @@ void UGameManagerWSS::EnterStation()
 		train->StartTrain();
 		train->Stopped = false;
 		enemySpawner->IncreaseEnemyDifficulty();
-
+		enemySpawner->StopAllEncounterSpawning();
 	}
 }
 

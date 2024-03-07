@@ -88,19 +88,19 @@ void AEnemyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 }
 
-bool AEnemyCharacter::TakeDamage(float distance, float damage, FVector sourcePos, float launchForce) {
+bool AEnemyCharacter::TakeDamage(float distance, float damage, FVector sourcePos, float launchForce, bool dropLoot) {
 	if (EnemyState == EEnemyState::Dead) {
 		return false;
 	}
 	//damage = damage * ((1/distance) * 1000);
 	currentHealth -= damage;
 	NotifyHealthBarWidget();
-	NotifyDamageEnemy(damage);
+	NotifyDamageEnemy(damage, dropLoot);
 	Knockback(GetActorLocation() - sourcePos, launchForce);
 	//LaunchCharacter((GetActorLocation()-sourcePos) * launchForce,true, true);
 	if (currentHealth <= 0) {
 		EnemyState = EEnemyState::Dead;
-		EnemyKilled();
+		EnemyKilled(dropLoot);
 		return true;
 	}
 	return false;

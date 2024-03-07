@@ -182,7 +182,7 @@ void ATurret::Ray()
 			
 			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetFName().ToString());
 			if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(hit.GetActor())) {
-				enemy->TakeDamage(hit.Distance, Damage, GetActorLocation(), KnockbackForce);
+				enemy->TakeDamage(hit.Distance, Damage, GetActorLocation(), KnockbackForce, true);
 			}
 			/*else {
 				SpawnHitVFXType(hit);

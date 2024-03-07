@@ -85,6 +85,8 @@ public:
 
 	float GetPriceInflation();
 
+	void EnemyKilled();
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	

@@ -37,7 +37,7 @@ protected:
 	void NotifyHealthBarWidget();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void NotifyDamageEnemy(float Damage);
+	void NotifyDamageEnemy(float Damage, bool showDamage);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ActivateEnemy();
@@ -46,7 +46,7 @@ protected:
 	void DeactivateEnemy();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void EnemyKilled();
+	void EnemyKilled(bool dropLoot);
 public:	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
@@ -80,7 +80,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	bool TakeDamage(float distance, float damage, FVector sourcePos, float launchForce);
+	bool TakeDamage(float distance, float damage, FVector sourcePos, float launchForce, bool dropLoot);
 
 	UFUNCTION(BlueprintCallable)
 	void Knockback(FVector direction, float force);

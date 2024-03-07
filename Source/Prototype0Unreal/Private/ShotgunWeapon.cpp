@@ -42,7 +42,7 @@ void AShotgunWeapon::Ray()
 			if (actorHit && hit.GetActor()) {
 				//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetFName().ToString());
 				if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(hit.GetActor())) {
-					if (enemy->TakeDamage(hit.Distance, Damage - FMath::RandRange(0, ((int)(OwnerCharacter->DamageBuff / 2) + 3)) + OwnerCharacter->DamageBuff, GetActorLocation(), KnockbackForce)) {
+					if (enemy->TakeDamage(hit.Distance, Damage - FMath::RandRange(0, ((int)(OwnerCharacter->DamageBuff / 2) + 3)) + OwnerCharacter->DamageBuff, GetActorLocation(), KnockbackForce, true)) {
 						KilledEnemy();
 					}
 				}

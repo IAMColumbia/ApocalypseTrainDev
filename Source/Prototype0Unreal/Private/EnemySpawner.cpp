@@ -43,14 +43,20 @@ void AEnemySpawner::BeginPlay()
 
 bool AEnemySpawner::encounterEnemiesKilled()
 {
-	if (encounterEnemies.Num() > 0) {
-		for (AEnemyCharacter* e : encounterEnemies) {
-			if (e->isSpawned()) {
-				return false;
-			}
+	if (enemiesKilledThisEncounter >= enemiesPerEncounter) {
+		return true;
+	}
+	return false;
+}
+
+void AEnemySpawner::KillRemainingEncounterEnemies()
+{
+	for (AEnemyCharacter* e : encounterEnemies) {
+		if (e->isSpawned()) {
+			e->TakeDamage(0, 10000000, e->GetActorLocation(), 0, false);
 		}
 	}
-	return true;
+	encounterEnemies.Empty();
 }
 
 // Called every frame
@@ -60,25 +66,32 @@ void AEnemySpawner::Tick(float DeltaTime)
 	if (EncounterSpawningComplete && GetWorld()->GetSubsystem<UGameManagerWSS>()->EncounterActive() && encounterEnemiesKilled()) {
 		//GetWorld()->GetSubsystem<UGameManagerWSS>()->EnterStation();
 		GetWorld()->GetSubsystem<UGameManagerWSS>()->waitingForShopEnterDoors = true;
-		encounterEnemies.Empty();
+		enemiesPerEncounter += enemiesPerEncounterIncrease;
+		KillRemainingEncounterEnemies();
+		GetWorld()->GetTimerManager().ClearTimer(rearSpawner);
+		HideKillCounter();
 	}
 }
 
 void AEnemySpawner::StartRearSpawner()
 {
 	if (EncounterSpawningComplete == true) {
+		enemiesKilledThisEncounter = 0;
 		EncounterSpawningComplete = false;
 		currentEnemiesPerEncounter = enemiesPerEncounter;
 		GetWorld()->GetTimerManager().SetTimer(rearSpawner, this, &AEnemySpawner::SpawnEnemyBehindTrain, RearSpawnRate, true);
 		int chunks = GetWorld()->GetSubsystem<UGameManagerWSS>()->TotalChunksSpawned();
 		RearSpawnRate -= (chunks * SpawnRateIncrease);
+		DisplayKillCounter(enemiesPerEncounter);
+		DisplayHordeWarning();
 	}
 }
 
 void AEnemySpawner::StopRearSpawner()
 {
-	GetWorld()->GetTimerManager().ClearTimer(rearSpawner);
+	StopAllEncounterSpawning();
 	EncounterSpawningComplete = true;
+	GetWorld()->GetTimerManager().SetTimer(rearSpawner, this, &AEnemySpawner::SpawnEnemyBehindTrain, RearAftermathSpawnRate, true);
 }
 
 void AEnemySpawner::SpawnEnemies()
@@ -102,10 +115,11 @@ void AEnemySpawner::SpawnEnemyBehindTrain()
 	if (e != NULL) {
 		encounterEnemies.Add(e);
 	}
-	currentEnemiesPerEncounter--;
-	if (currentEnemiesPerEncounter <= 0) {
-		StopRearSpawner();
-		enemiesPerEncounter += enemiesPerEncounterIncrease;
+	if (!EncounterSpawningComplete) {
+		currentEnemiesPerEncounter--;
+		if (currentEnemiesPerEncounter <= 0) {
+			StopRearSpawner();
+		}
 	}
 }
 
@@ -136,5 +150,10 @@ AEnemyCharacter* AEnemySpawner::SpawnPooledEnemy(FVector spawnLocation, FRotator
 		}
 	}
 	return NULL;
+}
+
+void AEnemySpawner::StopAllEncounterSpawning()
+{
+	GetWorld()->GetTimerManager().ClearTimer(rearSpawner);
 }
 

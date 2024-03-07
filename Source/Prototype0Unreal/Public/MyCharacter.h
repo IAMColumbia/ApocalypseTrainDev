@@ -60,6 +60,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void BashFinished();
 
+	void OnEnemyKilled();
+
 protected:
 
 	void CheckForEnemyShowHealth();

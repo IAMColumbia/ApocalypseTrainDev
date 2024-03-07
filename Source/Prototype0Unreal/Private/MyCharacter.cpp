@@ -238,6 +238,12 @@ void AMyCharacter::AddCoins(int coins)
 	UpdateCoinUI();
 }
 
+void AMyCharacter::OnEnemyKilled()
+{
+	TotalKills++;
+	GetWorld()->GetSubsystem<UGameManagerWSS>()->EnemyKilled();
+}
+
 void AMyCharacter::CheckForEnemyShowHealth()
 {
 	FVector* start;

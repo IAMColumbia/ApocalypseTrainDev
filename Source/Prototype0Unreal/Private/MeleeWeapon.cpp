@@ -47,7 +47,7 @@ void AMeleeWeapon::OnWeaponBeginOverlap(UPrimitiveComponent* OverlappedComp, AAc
 			obstacle->DamageObstacle(ObstacleDamage);
 		}
 		if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(OtherActor)) {
-			enemy->TakeDamage(0, EnemyDamage, GetActorLocation(), KnockbackForce);
+			enemy->TakeDamage(0, EnemyDamage, GetActorLocation(), KnockbackForce, true);
 		}
 	}
 }

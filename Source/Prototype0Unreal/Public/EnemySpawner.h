@@ -56,6 +56,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawning")
 	float RearSpawnRate;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawning")
+	float RearAftermathSpawnRate;
+
 	int ZombiesAlive();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Shop")
@@ -74,6 +77,8 @@ protected:
 	TArray<AEnemyCharacter*> encounterEnemies;
 	bool encounterEnemiesKilled();
 
+	void KillRemainingEncounterEnemies();
+
 	FTimerHandle rearSpawner;
 
 	TArray<AEnemyCharacter*> enemyPool;
@@ -88,6 +93,8 @@ public:
 	int enemiesPerEncounterIncrease = 2;
 
 	bool EncounterSpawningComplete;
+
+	int enemiesKilledThisEncounter;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -109,4 +116,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemyType")
 	TSubclassOf<AEnemyCharacter> enemyActorClass;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DisplayKillCounter(int enemiesNeeded);
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void HideKillCounter();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void DisplayHordeWarning();
+
+	void StopAllEncounterSpawning();
 };
