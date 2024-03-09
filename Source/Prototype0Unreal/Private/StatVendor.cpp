@@ -17,8 +17,8 @@ FText AStatVendor::getInfoText()
 
 void AStatVendor::BeginPlay()
 {
-	Super::BeginPlay();
 	CostOfItem = CostOfItem + GetWorld()->GetSubsystem<UGameManagerWSS>()->GetPriceInflation();
+	Super::BeginPlay();
 }
 
 void AStatVendor::OnInteract(AMyCharacter* player)

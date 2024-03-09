@@ -4,6 +4,7 @@
 #include "MeleeWeapon.h"
 #include "Obstacle.h"
 #include "EnemyCharacter.h"
+#include "MyCharacter.h"
 
 // Sets default values
 AMeleeWeapon::AMeleeWeapon()
@@ -47,7 +48,11 @@ void AMeleeWeapon::OnWeaponBeginOverlap(UPrimitiveComponent* OverlappedComp, AAc
 			obstacle->DamageObstacle(ObstacleDamage);
 		}
 		if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(OtherActor)) {
-			enemy->TakeDamage(0, EnemyDamage, GetActorLocation(), KnockbackForce, true);
+			if (enemy->TakeDamage(0, EnemyDamage, GetActorLocation(), KnockbackForce, true)) {
+				if (OwnerCharacter != NULL) {
+					OwnerCharacter->OnEnemyKilled();
+				}
+			}
 		}
 	}
 }
