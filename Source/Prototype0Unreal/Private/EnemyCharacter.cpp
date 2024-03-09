@@ -96,7 +96,9 @@ bool AEnemyCharacter::TakeDamage(float distance, float damage, FVector sourcePos
 	currentHealth -= damage;
 	NotifyHealthBarWidget();
 	NotifyDamageEnemy(damage, dropLoot);
-	Knockback(GetActorLocation() - sourcePos, launchForce);
+	FVector knockbackDir = GetActorLocation() - sourcePos;
+	knockbackDir.Z /= 4;
+	Knockback(knockbackDir, launchForce);
 	//LaunchCharacter((GetActorLocation()-sourcePos) * launchForce,true, true);
 	if (currentHealth <= 0) {
 		EnemyState = EEnemyState::Dead;

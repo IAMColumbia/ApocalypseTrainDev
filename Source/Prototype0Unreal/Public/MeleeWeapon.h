@@ -24,6 +24,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	class AMyCharacter* OwnerCharacter;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ObstacleDamage;

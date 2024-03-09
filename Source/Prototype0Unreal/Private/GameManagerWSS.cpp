@@ -14,9 +14,11 @@ float UGameManagerWSS::GetPriceInflation()
 
 void UGameManagerWSS::EnemyKilled()
 {
-	enemySpawner->enemiesKilledThisEncounter++;
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString::Printf(TEXT("%d killed out of %d"), enemySpawner->enemiesKilledThisEncounter, enemySpawner->enemiesPerEncounter));
-	enemySpawner->DisplayKillCounter(enemySpawner->enemiesPerEncounter - enemySpawner->enemiesKilledThisEncounter);
+	if (EncounterActive()) {
+		enemySpawner->enemiesKilledThisEncounter++;
+		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString::Printf(TEXT("%d killed out of %d"), enemySpawner->enemiesKilledThisEncounter, enemySpawner->enemiesPerEncounter));
+		enemySpawner->DisplayKillCounter(enemySpawner->enemiesPerEncounter - enemySpawner->enemiesKilledThisEncounter);
+	}
 }
 
 void UGameManagerWSS::Initialize(FSubsystemCollectionBase& Collection) {
@@ -181,6 +183,7 @@ void UGameManagerWSS::ApproachingStation()
 		CurrentGameState = EGameState::encounter;
 		train->StartHordeEncounter();
 		enemySpawner->StartRearSpawner();
+		//enemySpawner->PriceInflation++;
 	}
 }
 

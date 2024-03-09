@@ -91,6 +91,7 @@ void AMyCharacter::BeginPlay()
 	CurrentWeapon->OwnerCharacter = this;
 	AttachWeapon();
 	CurrentMeleeWeapon = Cast<AMeleeWeapon>(GetWorld()->SpawnActor(MeleeWeapon));
+	CurrentMeleeWeapon->OwnerCharacter = this;
 	HolsterMeleeWeapon();
 	
 }
