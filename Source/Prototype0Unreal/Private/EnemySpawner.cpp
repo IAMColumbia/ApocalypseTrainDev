@@ -38,6 +38,23 @@ void AEnemySpawner::BeginPlay()
 			enemy->DespawnPooledCharacter();
 		}
 	}
+	for (int i = 0; i < MaximumPooledEnemies/2; i++) {
+		AEnemyCharacter* enemy = GetWorld()->SpawnActor<AEnemyCharacter>(level2Enemy, FVector(-4000, 0, 0), FRotator(0, 0, 0), FActorSpawnParameters());
+		if (enemy != NULL) {
+			level2enemyPool.Add(enemy);
+			enemy->DespawnPooledCharacter();
+		}
+	}
+	for (int i = 0; i < MaximumPooledEnemies / 3; i++) {
+		AEnemyCharacter* enemy = GetWorld()->SpawnActor<AEnemyCharacter>(level3Enemy, FVector(-4000, 0, 0), FRotator(0, 0, 0), FActorSpawnParameters());
+		if (enemy != NULL) {
+			level3enemyPool.Add(enemy);
+			enemy->DespawnPooledCharacter();
+		}
+	}
+	enemyPoolArray.Add(enemyPool);
+	enemyPoolArray.Add(level2enemyPool);
+	enemyPoolArray.Add(level3enemyPool);
 	EncounterSpawningComplete = true;
 }
 
@@ -82,6 +99,9 @@ void AEnemySpawner::StartRearSpawner()
 		GetWorld()->GetTimerManager().SetTimer(rearSpawner, this, &AEnemySpawner::SpawnEnemyBehindTrain, RearSpawnRate, true);
 		int chunks = GetWorld()->GetSubsystem<UGameManagerWSS>()->TotalChunksSpawned();
 		RearSpawnRate -= (chunks * SpawnRateIncrease);
+		if (RearSpawnRate <= 0) {
+			RearSpawnRate = 0.01f;
+		}
 		DisplayKillCounter(enemiesPerEncounter);
 		DisplayHordeWarning();
 	}
@@ -140,7 +160,11 @@ AEnemyCharacter* AEnemySpawner::SpawnPooledEnemy(FVector spawnLocation, FRotator
 	if (enemyPool.IsEmpty()) {
 		return NULL;
 	}
-	for (AEnemyCharacter* enemy : enemyPool) {
+
+	int encountersCompleted = GetWorld()->GetSubsystem<UGameManagerWSS>()->HordesDefeated;
+	int enemyType = FMath::RandRange(0,encountersCompleted);
+	enemyType = FMath::Clamp(enemyType, 0, enemyPoolArray.Num() - 1);
+	for (AEnemyCharacter* enemy : enemyPoolArray[enemyType]) {
 		if (enemy != NULL) {
 			if (!enemy->isSpawned()) {
 				enemy->upgradeEnemy(EnemyHealth, EnemyDamage, EnemySpeed);
@@ -149,6 +173,8 @@ AEnemyCharacter* AEnemySpawner::SpawnPooledEnemy(FVector spawnLocation, FRotator
 			}
 		}
 	}
+
+	
 	return NULL;
 }
 

@@ -145,6 +145,7 @@ void ATrain::BeginPlay()
 			}
 		}
 	}
+	ShouldZoomCamera = true;
 	
 }
 
@@ -232,6 +233,7 @@ void ATrain::ToggleTrainState()
 
 void ATrain::StartHordeEncounter()
 {
+	ShouldZoomCamera = false;
 	Stopped = true;
 	StopTrain();
 }

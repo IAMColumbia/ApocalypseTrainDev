@@ -180,6 +180,7 @@ void UGameManagerWSS::PlayerJoined()
 void UGameManagerWSS::ApproachingStation()
 {
 	if (train != NULL && enemySpawner != NULL) {
+		
 		CurrentGameState = EGameState::encounter;
 		train->StartHordeEncounter();
 		enemySpawner->StartRearSpawner();
@@ -190,7 +191,9 @@ void UGameManagerWSS::ApproachingStation()
 void UGameManagerWSS::EnterStation()
 {
 	if (train != NULL) {
+		IsInShopSequence = true;
 		CurrentGameState = EGameState::traveling;
+		HordesDefeated++;
 		train->StartTrain();
 		train->Stopped = false;
 		enemySpawner->IncreaseEnemyDifficulty();
@@ -204,7 +207,7 @@ void UGameManagerWSS::ExitStation()
 		CurrentGameState = EGameState::traveling;
 		train->Stopped = false;
 		train->StartTrain();
-
+		IsInShopSequence = false;
 	}
 }
 

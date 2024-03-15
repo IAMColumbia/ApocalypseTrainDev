@@ -66,6 +66,9 @@ public:
 
 	FVector GetDeadPlayerHolderLocation();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool ShouldZoomCamera;
+
 protected:
 
 	UBoxComponent* deadPlayerHolder;

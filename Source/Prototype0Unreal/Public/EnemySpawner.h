@@ -82,6 +82,10 @@ protected:
 	FTimerHandle rearSpawner;
 
 	TArray<AEnemyCharacter*> enemyPool;
+	TArray<AEnemyCharacter*> level2enemyPool;
+	TArray<AEnemyCharacter*> level3enemyPool;
+	
+	TArray<TArray<AEnemyCharacter*>> enemyPoolArray;
 
 public:	
 	
@@ -116,6 +120,12 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemyType")
 	TSubclassOf<AEnemyCharacter> enemyActorClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyType")
+	TSubclassOf<AEnemyCharacter> level2Enemy;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyType")
+	TSubclassOf<AEnemyCharacter> level3Enemy;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void DisplayKillCounter(int enemiesNeeded);

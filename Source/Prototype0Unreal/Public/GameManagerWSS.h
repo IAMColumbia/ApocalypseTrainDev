@@ -21,6 +21,12 @@ class PROTOTYPE0UNREAL_API UGameManagerWSS : public UWorldSubsystem
 
 public:
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool IsInShopSequence;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int HordesDefeated;
+
 	EGameState CurrentGameState;
 
 	bool EncounterActive();
