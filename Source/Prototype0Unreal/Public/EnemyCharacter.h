@@ -48,6 +48,9 @@ protected:
 	UFUNCTION(BlueprintImplementableEvent)
 	void EnemyKilled(bool dropLoot);
 public:	
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void NotifyCanDamagePlayer(bool CanDamage);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
 	float MaxHealth;

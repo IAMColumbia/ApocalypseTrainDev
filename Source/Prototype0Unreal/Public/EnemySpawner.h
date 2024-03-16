@@ -88,7 +88,7 @@ protected:
 	TArray<TArray<AEnemyCharacter*>> enemyPoolArray;
 
 public:	
-	
+
 	int currentEnemiesPerEncounter;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
