@@ -8,7 +8,7 @@
 #include "Projectile.h"
 #include <Kismet/KismetMathLibrary.h>
 
-void AShotgunWeapon::Ray()
+void AShotgunWeapon::DetermineShotWithRay()
 {
 	for (int i = 0; i < raysPerShot; i++) {
 		if (BulletSpawn == NULL) {

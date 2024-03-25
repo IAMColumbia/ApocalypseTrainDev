@@ -6,21 +6,25 @@
 #include "EnemyCharacter.h"
 #include <Kismet/KismetSystemLibrary.h>
 #include "GameManagerWSS.h"
+
+
+
+
 // Sets default values
 AEnemySpawner::AEnemySpawner()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
-	
 }
 
 int AEnemySpawner::ZombiesAlive()
 {
 	int alive = 0;
-	for (AEnemyCharacter* e : enemyPool) {
-		if (e->isSpawned()) {
-			alive++;
+	for (TArray<AEnemyCharacter*> pool : enemyPoolArray) {
+		for (AEnemyCharacter* e : pool) {
+			if (e->isSpawned()) {
+				alive++;
+			}
 		}
 	}
 	return alive;
@@ -31,32 +35,12 @@ void AEnemySpawner::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetSubsystem<UGameManagerWSS>()->enemySpawner = this;
-	for (int i = 0; i < MaximumPooledEnemies; i++) {
-		AEnemyCharacter* enemy = GetWorld()->SpawnActor<AEnemyCharacter>(enemyActorClass, FVector(-4000, 0, 0 ),FRotator(0,0,0), FActorSpawnParameters());
-		if (enemy != NULL) {
-			enemyPool.Add(enemy);
-			enemy->DespawnPooledCharacter();
-		}
+	for (FEnemySpawnInfo spawnInfo : enemyTypes) {
+		enemyPoolArray.Add(createEnemyPool(spawnInfo.enemyType, spawnInfo.MaxPooledEnemies));
 	}
-	for (int i = 0; i < MaximumPooledEnemies/2; i++) {
-		AEnemyCharacter* enemy = GetWorld()->SpawnActor<AEnemyCharacter>(level2Enemy, FVector(-4000, 0, 0), FRotator(0, 0, 0), FActorSpawnParameters());
-		if (enemy != NULL) {
-			level2enemyPool.Add(enemy);
-			enemy->DespawnPooledCharacter();
-		}
-	}
-	for (int i = 0; i < MaximumPooledEnemies / 3; i++) {
-		AEnemyCharacter* enemy = GetWorld()->SpawnActor<AEnemyCharacter>(level3Enemy, FVector(-4000, 0, 0), FRotator(0, 0, 0), FActorSpawnParameters());
-		if (enemy != NULL) {
-			level3enemyPool.Add(enemy);
-			enemy->DespawnPooledCharacter();
-		}
-	}
-	enemyPoolArray.Add(enemyPool);
-	enemyPoolArray.Add(level2enemyPool);
-	enemyPoolArray.Add(level3enemyPool);
 	EncounterSpawningComplete = true;
 }
+
 
 bool AEnemySpawner::encounterEnemiesKilled()
 {
@@ -76,27 +60,39 @@ void AEnemySpawner::KillRemainingEncounterEnemies()
 	encounterEnemies.Empty();
 }
 
+TArray<AEnemyCharacter*> AEnemySpawner::createEnemyPool(TSubclassOf<AEnemyCharacter> enemyClass, int MaxPool)
+{
+	TArray<AEnemyCharacter*> pool;
+	for (int i = 0; i < MaxPool; i++) {
+		AEnemyCharacter* enemy = GetWorld()->SpawnActor<AEnemyCharacter>(enemyClass, initialEnemyPosition, FRotator(0, 0, 0), FActorSpawnParameters());
+		if (enemy != NULL) {
+			pool.Add(enemy);
+			enemy->DespawnPooledCharacter();
+		}
+	}
+	return pool;
+}
+
 // Called every frame
 void AEnemySpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if (EncounterSpawningComplete && GetWorld()->GetSubsystem<UGameManagerWSS>()->EncounterActive() && encounterEnemiesKilled()) {
-		//GetWorld()->GetSubsystem<UGameManagerWSS>()->EnterStation();
 		GetWorld()->GetSubsystem<UGameManagerWSS>()->waitingForShopEnterDoors = true;
 		enemiesPerEncounter += enemiesPerEncounterIncrease;
 		KillRemainingEncounterEnemies();
-		GetWorld()->GetTimerManager().ClearTimer(rearSpawner);
+		GetWorld()->GetTimerManager().ClearTimer(encounterSpawnTimerHandle);
 		HideKillCounter();
 	}
 }
 
-void AEnemySpawner::StartRearSpawner()
+void AEnemySpawner::StartEncounterSpawner()
 {
 	if (EncounterSpawningComplete == true) {
 		enemiesKilledThisEncounter = 0;
 		EncounterSpawningComplete = false;
 		currentEnemiesPerEncounter = enemiesPerEncounter;
-		GetWorld()->GetTimerManager().SetTimer(rearSpawner, this, &AEnemySpawner::SpawnEnemyBehindTrain, RearSpawnRate, true);
+		GetWorld()->GetTimerManager().SetTimer(encounterSpawnTimerHandle, this, &AEnemySpawner::SpawnEncounterEnemy, RearSpawnRate, true);
 		int chunks = GetWorld()->GetSubsystem<UGameManagerWSS>()->TotalChunksSpawned();
 		RearSpawnRate -= (chunks * SpawnRateIncrease);
 		if (RearSpawnRate <= 0) {
@@ -107,11 +103,11 @@ void AEnemySpawner::StartRearSpawner()
 	}
 }
 
-void AEnemySpawner::StopRearSpawner()
+void AEnemySpawner::StopEncounterSpawner()
 {
 	StopAllEncounterSpawning();
 	EncounterSpawningComplete = true;
-	GetWorld()->GetTimerManager().SetTimer(rearSpawner, this, &AEnemySpawner::SpawnEnemyBehindTrain, RearAftermathSpawnRate, true);
+	GetWorld()->GetTimerManager().SetTimer(encounterSpawnTimerHandle, this, &AEnemySpawner::SpawnEncounterEnemy, RearAftermathSpawnRate, true);
 }
 
 void AEnemySpawner::SpawnEnemies()
@@ -122,14 +118,9 @@ void AEnemySpawner::SpawnEnemies()
 	}
 }
 
-void AEnemySpawner::SpawnEnemyBehindTrain()
+void AEnemySpawner::SpawnEncounterEnemy()
 {
-	if (ZombiesAlive() == enemyPool.Num() || enemyPool.Num() == 0) {
-		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, TEXT("OutOfEnemiesToSpawnForEncounter"));
-		StopRearSpawner();
-		return;
-	}
-	FVector spawnLoc = GetWorld()->GetSubsystem<UGameManagerWSS>()->GetRandomLocationBehindTrain();
+	FVector spawnLoc = GetWorld()->GetSubsystem<UGameManagerWSS>()->GetRandomEncounterSpawnPos();
 	FVector trainLoc = GetWorld()->GetSubsystem<UGameManagerWSS>()->GetTrainLocation();
 	AEnemyCharacter* e = SpawnPooledEnemy(spawnLoc + FVector(0,0,400), FRotator().ZeroRotator, true, FVector(400, trainLoc.Y + 500, 20));
 	if (e != NULL) {
@@ -138,14 +129,9 @@ void AEnemySpawner::SpawnEnemyBehindTrain()
 	if (!EncounterSpawningComplete) {
 		currentEnemiesPerEncounter--;
 		if (currentEnemiesPerEncounter <= 0) {
-			StopRearSpawner();
+			StopEncounterSpawner();
 		}
 	}
-}
-
-void AEnemySpawner::PrintStuff()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Cyan, TEXT("I am enemy spawner"));
 }
 
 void AEnemySpawner::IncreaseEnemyDifficulty()
@@ -157,29 +143,25 @@ void AEnemySpawner::IncreaseEnemyDifficulty()
 
 AEnemyCharacter* AEnemySpawner::SpawnPooledEnemy(FVector spawnLocation, FRotator rotation, bool SetTarget, FVector target)
 {
-	if (enemyPool.IsEmpty()) {
-		return NULL;
-	}
-
 	int encountersCompleted = GetWorld()->GetSubsystem<UGameManagerWSS>()->HordesDefeated;
 	int enemyType = FMath::RandRange(0,encountersCompleted);
 	enemyType = FMath::Clamp(enemyType, 0, enemyPoolArray.Num() - 1);
-	for (AEnemyCharacter* enemy : enemyPoolArray[enemyType]) {
-		if (enemy != NULL) {
-			if (!enemy->isSpawned()) {
-				enemy->upgradeEnemy(EnemyHealth, EnemyDamage, EnemySpeed);
-				enemy->SpawnPooledCharacter(spawnLocation, rotation, SetTarget, target);
-				return enemy;
+	if (!enemyPoolArray[enemyType].IsEmpty()) {
+		for (AEnemyCharacter* enemy : enemyPoolArray[enemyType]) {
+			if (enemy != NULL) {
+				if (!enemy->isSpawned()) {
+					enemy->upgradeEnemy(EnemyHealth, EnemyDamage, EnemySpeed);
+					enemy->SpawnPooledCharacter(spawnLocation, rotation, SetTarget, target);
+					return enemy;
+				}
 			}
 		}
 	}
-
-	
 	return NULL;
 }
 
 void AEnemySpawner::StopAllEncounterSpawning()
 {
-	GetWorld()->GetTimerManager().ClearTimer(rearSpawner);
+	GetWorld()->GetTimerManager().ClearTimer(encounterSpawnTimerHandle);
 }
 

@@ -20,29 +20,16 @@ public:
 
     virtual FVector GetOwnerActorLocation() override;
 
+    UFUNCTION(BlueprintCallable, BlueprintPure)
+    int OwnerPlayerIndex();
+
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="UI")
     int WeaponNumber;
 
     UFUNCTION(BlueprintCallable, BlueprintPure)
     bool IsOwnerDead();
 
-protected:
-    // Called when the game starts or when spawned
-    virtual void BeginPlay() override;
-    FTimerHandle shootTimerHandle;
-    FTimerHandle reloadTimerHandle;
 
-    virtual void ShootProjectile() override;
-
-    USceneComponent* weaponRotator;
-
-    void SpawnHitVFXType(FHitResult hit);
-
-public:
-
-    void GetRay(FVector*& rayStart, FVector*& rayEnd);
-
-    bool Equipped;
 
     UPROPERTY(BlueprintReadOnly)
     FVector hitLocation;
@@ -63,54 +50,42 @@ public:
     // Called every frame
     virtual void Tick(float DeltaTime) override;
 
+    bool Attacking;
+    bool prevAttackState;
     virtual void Attack();
     virtual void EndAttack();
+    void UpdateAttackingState();
 
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     float RayOffset;
-
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     float RayLength;
+    void GetRayVector(FVector*& rayStart, FVector*& rayEnd);
 
+    virtual void DetermineShotWithRay() override;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float Damage;
-
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float FireRate;
-
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     float KnockbackForce;
-
     UFUNCTION(BlueprintImplementableEvent)
     void NotifyFiredShot();
 
+    bool Equipped;
+    void WeaponEquipped();
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Audio")
     USoundBase* equipSound;
-
     UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, category = "Audio")
     USoundAttenuation* attenuation;
 
-    void WeaponEquipped();
-
-    virtual void Ray() override;
-
-    UFUNCTION(BlueprintCallable, BlueprintPure)
-    int OwnerPlayerIndex();
-
-    float currentReloadTime;
-
-    void UpdateReloadTime();
-    void CheckForAttack();
-
-
     bool Reloaded;
-    bool Attacking;
+    float currentReloadTime;
     void Reload();
+    void UpdateReloadTime();
 
     USceneComponent* laser;
-
     void HideLaser();
-
     void ShowLaser();
 
     UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Projectile")
@@ -122,16 +97,28 @@ public:
     void CreateObjects();
     virtual void SpawnProjectile();
 
-    FQuat OriginalRotation;
     bool upright;
-    bool Clipping();
+    FQuat OriginalRotation;
+    bool IsWeaponClipping();
 
     virtual USceneComponent* GetBulletSpawn() override;
-    bool prevAttackState;
 
     UFUNCTION(BlueprintImplementableEvent)
     void NotifyStoppedShooting();
 
     UFUNCTION(BlueprintImplementableEvent)
     void OwnerDied();
+
+protected:
+    // Called when the game starts or when spawned
+    virtual void BeginPlay() override;
+
+    FTimerHandle shootTimerHandle;
+    FTimerHandle reloadTimerHandle;
+    virtual void ShootProjectile() override;
+
+    USceneComponent* weaponRotator;
+
+    void SpawnHitVFXType(FHitResult hit);
+
 };

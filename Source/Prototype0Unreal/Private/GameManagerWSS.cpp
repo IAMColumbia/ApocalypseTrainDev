@@ -48,7 +48,7 @@ void UGameManagerWSS::SpawnNewChunk()
 	chunkSpawner->SpawnNextChunk();
 	TotalMeters = train->TotalMeters;
 	if (train->CanMove && chunkSpawner->TotalChunksSpawned >= 0) {
-		if (TotalMeters % enemySpawner->DifficultyIncrease == 0 && TotalMeters > 2) {
+		if (TotalMeters % enemySpawner->DifficultyIncreaseFrequency == 0 && TotalMeters > 2) {
 			enemySpawner->EnemiesPerChunk++;
 		}
 		enemySpawner->SpawnEnemies();
@@ -77,7 +77,7 @@ FVector UGameManagerWSS::GetRandomLocationInChunk(float zoffset)
 	return location;
 }
 
-FVector UGameManagerWSS::GetRandomLocationBehindTrain()
+FVector UGameManagerWSS::GetRandomEncounterSpawnPos()
 {
 	return train->GetRandomEncounterSpawnPos();
 }
@@ -115,7 +115,7 @@ bool UGameManagerWSS::IsOutOfBackBounds(FVector actorLocation)
 
 void UGameManagerWSS::OnTrainAccelerating()
 {
-	enemySpawner->StopRearSpawner();
+	enemySpawner->StopEncounterSpawner();
 }
 
 void UGameManagerWSS::OnTrainStopped()
@@ -183,7 +183,7 @@ void UGameManagerWSS::ApproachingStation()
 		
 		CurrentGameState = EGameState::encounter;
 		train->StartHordeEncounter();
-		enemySpawner->StartRearSpawner();
+		enemySpawner->StartEncounterSpawner();
 		//enemySpawner->PriceInflation++;
 	}
 }

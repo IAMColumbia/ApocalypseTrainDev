@@ -249,7 +249,7 @@ void AMyCharacter::CheckForEnemyShowHealth()
 {
 	FVector* start;
 	FVector* end;
-	CurrentWeapon->GetRay(start, end);
+	CurrentWeapon->GetRayVector(start, end);
 	FHitResult hit;
 	if (GetWorld()) {
 		FCollisionQueryParams QueryParams;

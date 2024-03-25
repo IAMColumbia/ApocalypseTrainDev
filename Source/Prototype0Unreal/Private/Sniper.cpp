@@ -6,7 +6,7 @@
 #include "EnemyCharacter.h"
 #include "MyCharacter.h"
 
-void ASniper::Ray()
+void ASniper::DetermineShotWithRay()
 {
 	if (BulletSpawn == NULL) {
 		return;

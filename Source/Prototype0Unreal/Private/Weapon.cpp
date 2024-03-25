@@ -96,11 +96,11 @@ void AWeapon::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	UpdateReloadTime();
-	CheckForAttack();
-	if (Clipping() && Equipped) {
+	UpdateAttackingState();
+	if (IsWeaponClipping() && Equipped) {
 		RaiseWeapon();
 	}
-	else if (!Clipping() && Equipped) {
+	else if (!IsWeaponClipping() && Equipped) {
 		LowerWeapon();
 	}
 }
@@ -136,49 +136,30 @@ void AWeapon::WeaponEquipped()
 
 }
 
-void AWeapon::GetRay(FVector*& rayStart, FVector*& rayEnd) {
+void AWeapon::GetRayVector(FVector*& rayStart, FVector*& rayEnd) {
 	FVector start = GetActorLocation();
-	//FVector forward = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(characterMesh->GetRightVector(), 0.8);
-	//FVector forward = OwnerCharacter->characterMesh->GetRightVector();
 	FVector forward = BulletSpawn->GetForwardVector();
 	forward.Z = 0;
-
 	start = FVector(start.X + (forward.X * RayOffset), start.Y + (forward.Y * RayOffset), start.Z + (forward.Z * RayOffset));
-	//maybe need to change end pos for randomness
 	FVector end = start + forward * RayLength;
 	rayStart = &start;
 	rayEnd = &end;
 }
 
-void AWeapon::Ray()
+void AWeapon::DetermineShotWithRay()
 {
 	if (BulletSpawn == NULL) {
 		return;
 	}
-	//FVector start = GetActorLocation();
-
-	////FVector forward = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(characterMesh->GetRightVector(), 0.8);
-	////FVector forward = OwnerCharacter->characterMesh->GetRightVector();
-	//FVector forward = BulletSpawn->GetForwardVector();
-	//forward.Z = 0;
-
-	//start = FVector(start.X + (forward.X * RayOffset), start.Y + (forward.Y * RayOffset), start.Z + (forward.Z * RayOffset));
-	////maybe need to change end pos for randomness
-	//FVector end = start + forward * RayLength;
 	FVector* start;
 	FVector* end;
-	GetRay(start, end);
-
+	GetRayVector(start, end);
 	FHitResult hit;
-
-
 	if (GetWorld()) {
 		FCollisionQueryParams QueryParams;
 		QueryParams.AddIgnoredActor(this);
 		QueryParams.AddIgnoredActor(OwnerCharacter);
 		bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, *start, *end, ECC_Pawn, QueryParams, FCollisionResponseParams());
-		//NotifyFiredShot(OwnerCharacter->GetActorRightVector());
-		
 		//DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.15f, 0.f, 10.f);
 		if (actorHit && hit.GetActor()) {
 			
@@ -210,14 +191,14 @@ void AWeapon::UpdateReloadTime()
 	OwnerCharacter->NotifyReloadPercent(currentReloadTime, FireRate);
 }
 
-void AWeapon::CheckForAttack()
+void AWeapon::UpdateAttackingState()
 {
 	if (prevAttackState && !Attacking) {
 		NotifyStoppedShooting();
 	}
 	prevAttackState = Attacking;
 	if (Attacking && Reloaded) {
-		if (!Clipping()) {
+		if (!IsWeaponClipping()) {
 			NotifyFiredShot();
 			ShootProjectile();
 			Reloaded = false;
@@ -268,7 +249,7 @@ void AWeapon::SpawnProjectile()
 	}
 }
 
-bool AWeapon::Clipping()
+bool AWeapon::IsWeaponClipping()
 {
 	if (BulletSpawn == NULL) {
 		return false;
@@ -316,16 +297,13 @@ void AWeapon::Attack()
 void AWeapon::ShootProjectile() {
 	OwnerCharacter->NotifyShot();
 	SpawnProjectile();
-	Ray();
+	DetermineShotWithRay();
 }
 
 void AWeapon::SpawnHitVFXType(FHitResult hit)
 {
 	hitLocation = hit.Location;
 	hitNormal = hit.Normal;
-	/*if (hit.GetActor()->ActorHasTag("Fuel")) {
-		return;
-	}*/
 	if (hit.GetActor()->ActorHasTag("Wooden")) {
 		SpawnBulletVFX(hitLocation, hitNormal, 1);
 	}

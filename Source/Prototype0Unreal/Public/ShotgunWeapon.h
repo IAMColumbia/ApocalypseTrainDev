@@ -21,7 +21,7 @@ public:
 	float raysPerShot;
 
 protected:
-	virtual void Ray() override;
+	virtual void DetermineShotWithRay() override;
 	
 	virtual void SpawnProjectile() override;
 

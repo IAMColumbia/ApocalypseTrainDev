@@ -95,7 +95,7 @@ public:
 
 	virtual USceneComponent* GetBulletSpawn() override;
 
-	virtual void Ray() override;
+	virtual void DetermineShotWithRay() override;
 
 
 };

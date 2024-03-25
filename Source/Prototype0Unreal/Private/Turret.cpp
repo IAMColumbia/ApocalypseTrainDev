@@ -132,7 +132,7 @@ void ATurret::VisionSweep()
 		Reloaded = false;
 		SpawnProjectile();
 		NotifyFiredShot();
-		Ray();
+		DetermineShotWithRay();
 		GetWorld()->GetTimerManager().SetTimer(reloadTimerHandle, this, &ATurret::Reload, FireRate, false);
 	}
 
@@ -152,7 +152,7 @@ void ATurret::Reload()
 	Reloaded = true;
 }
 
-void ATurret::Ray()
+void ATurret::DetermineShotWithRay()
 {
 	if (BulletSpawn == NULL) {
 		return;

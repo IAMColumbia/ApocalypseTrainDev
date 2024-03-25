@@ -21,6 +21,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int Penetration;
 
-	virtual void Ray() override;
+	virtual void DetermineShotWithRay() override;
 	
 };

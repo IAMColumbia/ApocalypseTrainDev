@@ -48,7 +48,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FVector GetRandomLocationInChunk(float zoffset);
 
-	FVector GetRandomLocationBehindTrain();
+	FVector GetRandomEncounterSpawnPos();
 
 	FVector GetTrainLocation();
 

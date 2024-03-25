@@ -9,6 +9,16 @@
 class UGameManagerWSS;
 class AEnemyCharacter;
 
+USTRUCT(BlueprintType)
+struct FEnemySpawnInfo {
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AEnemyCharacter> enemyType;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int MaxPooledEnemies;
+};
+
 UCLASS()
 class PROTOTYPE0UNREAL_API AEnemySpawner : public AActor
 {
@@ -30,6 +40,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Initial Values")
 	float EnemyDamage;
 
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Enemy Initial Values")
+	FVector initialEnemyPosition;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Difficulty Increase")
 	float SpawnRateIncrease;
 
@@ -44,11 +57,10 @@ public:
 
 	//a wave divisible by this number will increase the enemy difficulty
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Difficulty Increase")
-	int DifficultyIncrease;
+	int DifficultyIncreaseFrequency;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 	int EnemiesPerChunk;
-
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
 	int MaxEnemies;
@@ -59,7 +71,17 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Spawning")
 	float RearAftermathSpawnRate;
 
-	int ZombiesAlive();
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+	int enemiesPerEncounter = 2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
+	int enemiesPerEncounterIncrease = 2;
+
+	bool EncounterSpawningComplete;
+
+	int currentEnemiesPerEncounter;
+	int enemiesKilledThisEncounter;
+
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Shop")
 	float PriceInflation;
@@ -79,53 +101,36 @@ protected:
 
 	void KillRemainingEncounterEnemies();
 
-	FTimerHandle rearSpawner;
+	FTimerHandle encounterSpawnTimerHandle;
 
-	TArray<AEnemyCharacter*> enemyPool;
-	TArray<AEnemyCharacter*> level2enemyPool;
-	TArray<AEnemyCharacter*> level3enemyPool;
+	TArray<AEnemyCharacter*> createEnemyPool(TSubclassOf<AEnemyCharacter> enemyClass, int MaxPool);
 	
 	TArray<TArray<AEnemyCharacter*>> enemyPoolArray;
 
 public:	
 
-	int currentEnemiesPerEncounter;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawning")
-	int enemiesPerEncounter = 2;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Spawning")
-	int enemiesPerEncounterIncrease = 2;
-
-	bool EncounterSpawningComplete;
-
-	int enemiesKilledThisEncounter;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	void StartRearSpawner();
-	void StopRearSpawner();
+	void StartEncounterSpawner();
+	void StopEncounterSpawner();
+	
+	int ZombiesAlive();
 
 	void SpawnEnemies();
 
-	void SpawnEnemyBehindTrain();
-
-	void PrintStuff();
+	void SpawnEncounterEnemy();
 	
-	FTimerHandle spawnTimerHandle;
-
 	void IncreaseEnemyDifficulty();
+
+	void StopAllEncounterSpawning();
 
 	AEnemyCharacter* SpawnPooledEnemy(FVector spawnLocation, FRotator rotation, bool SetTarget, FVector target);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="EnemyType")
-	TSubclassOf<AEnemyCharacter> enemyActorClass;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyType")
-	TSubclassOf<AEnemyCharacter> level2Enemy;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "EnemyType")
-	TSubclassOf<AEnemyCharacter> level3Enemy;
+	TArray<FEnemySpawnInfo> enemyTypes;
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void DisplayKillCounter(int enemiesNeeded);
@@ -136,5 +141,4 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void DisplayHordeWarning();
 
-	void StopAllEncounterSpawning();
 };
