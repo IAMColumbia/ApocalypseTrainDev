@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "EnemyCharacter.h"
+#include "Characters/EnemyCharacter.h"
 #include <GameFramework/Actor.h>
-#include "GameManagerWSS.h"
+#include "Subsystems/GameManagerWSS.h"
 #include <Kismet/KismetMathLibrary.h>
-#include "MyCharacter.h"
+#include "Characters/MyCharacter.h"
 #include "Components/CapsuleComponent.h"
 
 // Sets default values

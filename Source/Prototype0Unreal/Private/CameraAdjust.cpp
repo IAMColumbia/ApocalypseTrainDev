@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CameraAdjust.h"
-#include "PlayerManagerWSS.h"
-#include "GameManagerWSS.h"
+#include "Utility/CameraAdjust.h"
+#include "Subsystems/PlayerManagerWSS.h"
+#include "Subsystems/GameManagerWSS.h"
 
 // Sets default values for this component's properties
 UCameraAdjust::UCameraAdjust()

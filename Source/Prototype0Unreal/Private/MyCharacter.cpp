@@ -1,20 +1,20 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MyCharacter.h"
+#include "Characters/MyCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include <Kismet/KismetMathLibrary.h>
-#include <EnemyCharacter.h>
-#include "GameManagerWSS.h"
+#include <Characters/EnemyCharacter.h>
+#include "Subsystems/GameManagerWSS.h"
 #include "Train.h"
 #include "Kismet/GameplayStatics.h"
-#include "PlayerManagerWSS.h"
+#include "Subsystems/PlayerManagerWSS.h"
 #include "Obstacle.h"
-#include <InteractableActor.h>
+#include <Interactables/InteractableActor.h>
 #include "GameFramework/CharacterMovementComponent.h"
-#include "Weapon.h"
-#include "MeleeWeapon.h"
+#include "Weapons/Weapon.h"
+#include "Weapons/MeleeWeapon.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()

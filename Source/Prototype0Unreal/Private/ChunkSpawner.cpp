@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ChunkSpawner.h"
-#include "GameManagerWSS.h"
+#include "Spawners/ChunkSpawner.h"
+#include "Subsystems/GameManagerWSS.h"
 
 
 // Sets default values

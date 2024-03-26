@@ -3,14 +3,14 @@
 
 
 #include "Train.h"
-#include "GameManagerWSS.h"
+#include "Subsystems/GameManagerWSS.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "EnemyCharacter.h"
-#include "PlayerManagerWSS.h"
+#include "Characters/EnemyCharacter.h"
+#include "Subsystems/PlayerManagerWSS.h"
 #include "Obstacle.h"
-#include "MyCharacter.h"
+#include "Characters/MyCharacter.h"
 #include <Internationalization/Text.h>
-#include "InteractableActor.h"
+#include "Interactables/InteractableActor.h"
 
 // Sets default values
 ATrain::ATrain()

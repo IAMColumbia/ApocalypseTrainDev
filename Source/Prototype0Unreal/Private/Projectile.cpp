@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Projectile.h"
-#include "ProjectileShooter.h"
-#include "Weapon.h"
+#include "Weapons/Projectiles/Projectile.h"
+#include "Weapons/ProjectileShooter.h"
+#include "Weapons/Weapon.h"
 
 void AProjectile::Tick(float DeltaTime)
 {

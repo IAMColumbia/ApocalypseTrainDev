@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PlayerSpawner.h"
+#include "Spawners/PlayerSpawner.h"
 
 
 // Sets default values

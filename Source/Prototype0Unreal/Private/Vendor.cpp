@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Vendor.h"
-#include "MyCharacter.h"
+#include "Interactables/Vendor.h"
+#include "Characters/MyCharacter.h"
 
 // Sets default values
 AVendor::AVendor()

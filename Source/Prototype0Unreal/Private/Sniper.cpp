@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Sniper.h"
+#include "Weapons/Sniper.h"
 #include "Obstacle.h"
-#include "EnemyCharacter.h"
-#include "MyCharacter.h"
+#include "Characters/EnemyCharacter.h"
+#include "Characters/MyCharacter.h"
 
 void ASniper::DetermineShotWithRay()
 {

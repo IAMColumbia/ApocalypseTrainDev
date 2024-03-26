@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "EnemySpawner.h"
-#include "GameManagerWSS.h"
-#include "EnemyCharacter.h"
+#include "Spawners/EnemySpawner.h"
+#include "Subsystems/GameManagerWSS.h"
+#include "Characters/EnemyCharacter.h"
 #include <Kismet/KismetSystemLibrary.h>
-#include "GameManagerWSS.h"
+#include "Subsystems/GameManagerWSS.h"
 
 
 

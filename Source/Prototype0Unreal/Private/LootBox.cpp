@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "LootBox.h"
-#include "MyCharacter.h"
-#include "GameManagerWSS.h"
+#include "Interactables/LootBox.h"
+#include "Characters/MyCharacter.h"
+#include "Subsystems/GameManagerWSS.h"
 
 
 

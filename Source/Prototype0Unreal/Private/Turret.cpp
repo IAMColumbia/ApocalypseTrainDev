@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "Turret.h"
-#include "Projectile.h"
+#include "Weapons/Turret.h"
+#include "Weapons/Projectiles/Projectile.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "EnemyCharacter.h"
+#include "Characters/EnemyCharacter.h"
 
 // Sets default values
 ATurret::ATurret()

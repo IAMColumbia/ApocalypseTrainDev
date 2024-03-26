@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ExplosiveLauncher.h"
-#include "MyCharacter.h"
-#include "ExplosiveProjectile.h"
+#include "Weapons/ExplosiveLauncher.h"
+#include "Characters/MyCharacter.h"
+#include "Weapons/Projectiles/ExplosiveProjectile.h"
 
 
 

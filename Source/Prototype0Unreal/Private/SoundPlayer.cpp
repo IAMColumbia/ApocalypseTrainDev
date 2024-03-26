@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "SoundPlayer.h"
+#include "Utility/SoundPlayer.h"
 
 // Sets default values for this component's properties
 USoundPlayer::USoundPlayer()

@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "MeleeWeapon.h"
+#include "Weapons/MeleeWeapon.h"
 #include "Obstacle.h"
-#include "EnemyCharacter.h"
-#include "MyCharacter.h"
+#include "Characters/EnemyCharacter.h"
+#include "Characters/MyCharacter.h"
 
 // Sets default values
 AMeleeWeapon::AMeleeWeapon()

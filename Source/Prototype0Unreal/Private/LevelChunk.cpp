@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "LevelChunk.h"
+#include "Map/LevelChunk.h"
 
 // Sets default values
 ALevelChunk::ALevelChunk()

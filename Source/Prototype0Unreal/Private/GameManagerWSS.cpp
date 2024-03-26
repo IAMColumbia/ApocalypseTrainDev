@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GameManagerWSS.h"
-#include "ChunkSpawner.h"
+#include "Subsystems/GameManagerWSS.h"
+#include "Spawners/ChunkSpawner.h"
 #include "Train.h"
-#include "EnemySpawner.h"
+#include "Spawners/EnemySpawner.h"
 #include <Kismet/GameplayStatics.h>
 
 float UGameManagerWSS::GetPriceInflation()
@@ -48,8 +48,10 @@ void UGameManagerWSS::SpawnNewChunk()
 	chunkSpawner->SpawnNextChunk();
 	TotalMeters = train->TotalMeters;
 	if (train->CanMove && chunkSpawner->TotalChunksSpawned >= 0) {
-		if (TotalMeters % enemySpawner->DifficultyIncreaseFrequency == 0 && TotalMeters > 2) {
-			enemySpawner->EnemiesPerChunk++;
+		if (enemySpawner->DifficultyIncreaseFrequency != 0) {
+			if (TotalMeters % enemySpawner->DifficultyIncreaseFrequency == 0 && TotalMeters > 2) {
+				enemySpawner->EnemiesPerChunk++;
+			}
 		}
 		enemySpawner->SpawnEnemies();
 	}

@@ -1,13 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "PlayerManagerWSS.h"
-#include "MyCharacter.h"
+#include "Subsystems/PlayerManagerWSS.h"
+#include "Characters/MyCharacter.h"
 #include <Kismet/KismetMathLibrary.h>
 #include <Components/BoxComponent.h>
 #include <Kismet/GameplayStatics.h>
-#include <Weapon.h>
-#include <GameManagerWSS.h>
+#include <Weapons/Weapon.h>
+#include <Subsystems/GameManagerWSS.h>
 #include <Components/SphereComponent.h>
 
 void UPlayerManagerWSS::RegisterPlayer(AMyCharacter* player)

@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ExplosiveProjectile.h"
+#include "Weapons/Projectiles/ExplosiveProjectile.h"
 #include "Components/SphereComponent.h"
-#include "Weapon.h"
+#include "Weapons/Weapon.h"
 
 // Sets default values
 AExplosiveProjectile::AExplosiveProjectile()

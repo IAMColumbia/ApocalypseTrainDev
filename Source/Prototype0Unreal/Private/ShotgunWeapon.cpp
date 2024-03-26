@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ShotgunWeapon.h"
-#include "MyCharacter.h"
+#include "Weapons/ShotgunWeapon.h"
+#include "Characters/MyCharacter.h"
 #include "Obstacle.h"
-#include "EnemyCharacter.h"
-#include "Projectile.h"
+#include "Characters/EnemyCharacter.h"
+#include "Weapons/Projectiles/Projectile.h"
 #include <Kismet/KismetMathLibrary.h>
 
 void AShotgunWeapon::DetermineShotWithRay()

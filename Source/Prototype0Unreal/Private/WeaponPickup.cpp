@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "WeaponPickup.h"
-#include "Weapon.h"
-#include "MyCharacter.h"
+#include "Interactables/WeaponPickup.h"
+#include "Weapons/Weapon.h"
+#include "Characters/MyCharacter.h"
 
 void AWeaponPickup::OnInteract(AMyCharacter* player)
 {

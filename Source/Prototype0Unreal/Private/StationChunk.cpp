@@ -1,9 +1,9 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "StationChunk.h"
-#include "GameManagerWSS.h"
-#include "EnemySpawner.h"
+#include "Map/StationChunk.h"
+#include "Subsystems/GameManagerWSS.h"
+#include "Spawners/EnemySpawner.h"
 
 
 bool AStationChunk::isEnterable()

@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Weapon.h"
-#include "MyCharacter.h"
-#include "EnemyCharacter.h"
+#include "Weapons/Weapon.h"
+#include "Characters/MyCharacter.h"
+#include "Characters/EnemyCharacter.h"
 #include "Obstacle.h"
-#include "Projectile.h"
+#include "Weapons/Projectiles/Projectile.h"
 #include <Kismet/GameplayStatics.h>
 
 // Sets default values

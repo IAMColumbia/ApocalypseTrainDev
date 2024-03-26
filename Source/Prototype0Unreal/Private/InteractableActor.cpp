@@ -1,10 +1,10 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "InteractableActor.h"
+#include "Interactables/InteractableActor.h"
 #include <Components/SphereComponent.h>
-#include <MyCharacter.h>
-#include <PlayerManagerWSS.h>
+#include <Characters/MyCharacter.h>
+#include <Subsystems/PlayerManagerWSS.h>
 
 // Sets default values
 AInteractableActor::AInteractableActor()

@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "GiveCoinVendor.h"
-#include "MyCharacter.h"
+#include "Interactables/GiveCoinVendor.h"
+#include "Characters/MyCharacter.h"
 
 void AGiveCoinVendor::CheckForInteractPressed()
 {
