@@ -99,9 +99,9 @@ public:
 	FTimerHandle countdown;
 	void DecrementGameOverCounter();
 	UPROPERTY(BlueprintReadOnly)
-	int graceTimeLeft;
+	int GraceTimeRemaining;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int GraceTime;
+	int GameOverGraceTime;
 	UFUNCTION(BlueprintImplementableEvent)
 	void NotifyGameOverCounter();
 

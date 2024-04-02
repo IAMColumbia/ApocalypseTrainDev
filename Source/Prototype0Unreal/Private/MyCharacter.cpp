@@ -28,26 +28,17 @@ AMyCharacter::AMyCharacter()
 bool AMyCharacter::IsFacingWall()
 {
 	FVector start = GetActorLocation();
-
-	//FVector forward = characterMesh->GetRightVector();
 	FVector forward = CarrySlot->GetComponentLocation() - GetActorLocation();
 	forward.Z = 0;
-
-	//start = FVector(start.X + (forward.X), start.Y + (forward.Y), start.Z + (forward.Z));
-	//maybe need to change end pos for randomness
 	FVector end = start + (forward* 1.2 );
-
 	FHitResult hit;
-
 	if (GetWorld()) {
 		FCollisionQueryParams QueryParams;
 		QueryParams.AddIgnoredActor(this);
 		QueryParams.AddIgnoredActor(carriedObject);
 		QueryParams.AddIgnoredActor(CurrentWeapon);
 		bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_WorldDynamic,QueryParams, FCollisionResponseParams());
-		//DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 4.15f, 0.f, 10.f);
 		if (actorHit && hit.GetActor()) {
-			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetFName().ToString());
 			if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(hit.GetActor())) {
 				return false;
 			}
@@ -85,8 +76,6 @@ void AMyCharacter::BeginPlay()
 		}
 	}
 	canDash = true;
-	//PlayerWeapon = Cast<AWeapon>(AddComponentByClass(AWeapon::StaticClass(), true, GetActorTransform(), false));
-	//PlayerWeapon = CreateDefaultSubobject<AWeapon>(TEXT("DefaultWeapon"));
 	CurrentWeapon = Cast<AWeapon>(GetWorld()->SpawnActor(DefaultWeapon));
 	CurrentWeapon->OwnerCharacter = this;
 	AttachWeapon();
@@ -116,18 +105,13 @@ void AMyCharacter::OnPlayerSpawn() {
 void AMyCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	//AMyCharacter::setXRot(GetInputAxisValue("Horizontal"));
-	//AMyCharacter::setYRot(GetInputAxisValue("Vertical"));
-	//AMyCharacter::setRotation();
 	if (trainPtr != NULL) {
 		if (trainPtr->IsOverlappingFuelBox(GetActorLocation()) && Carrying && carriedObject->ActorHasTag("Fuel")) {
-			//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Orange, FString::Printf(TEXT("is in box")));
 			CanAddFuel = true;
 		}
 		else {
 			CanAddFuel = false;
 		}
-		//DrawDebugBox(GetWorld(), trainPtr->GetRespawnPos(PlayerIndex), FVector(1, 1, 1) * 60, GetPlayerColor(), false, -1.0f, 0U, 10.0f);
 		if (gameManager->IsOutOfBounds(GetActorLocation())) {
 			DespawnPlayer();
 		}
@@ -200,8 +184,6 @@ void AMyCharacter::PickupItem(AInteractableActor* itemToCarry)
 	HolsterWeapon();
 	itemToCarry->OnPickedUp(CarrySlot);
 	ShootReleased();
-	//itemToCarry->SetActorLocation(CarryPosition->GetComponentLocation());
-	//itemToCarry->AttachToComponent(CarryPosition, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 }
 
 void AMyCharacter::CheckDropItem()
@@ -347,7 +329,6 @@ void AMyCharacter::MoveRight(float AxisValue) {
 }
 
 void AMyCharacter::setRotation() {
-	//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Green, FString::Printf(TEXT("X: %d  Y: %d"), aimRot.X, aimRot.Y));
 	if (aimRot.Length() >= deadZone) {
 		FRotator rotation = UKismetMathLibrary::MakeRotationFromAxes(aimRot, FVector::Zero(), FVector::Zero());
 		characterMesh->SetWorldRotation(rotation + FRotator(0, 200, 0));
@@ -402,7 +383,6 @@ void AMyCharacter::DashPressed()
 		}
 		GetWorld()->GetTimerManager().SetTimer(dashCooldownTimerHandle, this, &AMyCharacter::ResetDash,DashCooldown, false);
 		GetWorld()->GetTimerManager().SetTimer(dashTimerHandle, this, &AMyCharacter::FinishDash, KnockBackDuration, false);
-		//GetCharacterMovement()->MaxWalkSpeed = DashSpeed;
 		if (DashDirection.X == 0 && DashDirection.Y == 0) {
 			NotifyOnDash(characterMesh->GetRightVector()*-1);
 		}
@@ -451,7 +431,6 @@ void AMyCharacter::ApplyDash()
 			FCollisionQueryParams QueryParams;
 			QueryParams.AddIgnoredActor(this);
 			bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, QueryParams, FCollisionResponseParams());
-			//DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.15f, 0.f, 10.f);
 			if (actorHit && hit.GetActor()) {
 
 			}

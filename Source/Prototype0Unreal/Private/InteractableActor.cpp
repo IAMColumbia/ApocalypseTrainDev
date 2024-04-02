@@ -6,12 +6,9 @@
 #include <Characters/MyCharacter.h>
 #include <Subsystems/PlayerManagerWSS.h>
 
-// Sets default values
 AInteractableActor::AInteractableActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void AInteractableActor::DropObject(FVector directionToLaunch)
@@ -20,7 +17,6 @@ void AInteractableActor::DropObject(FVector directionToLaunch)
 	OnDropped(directionToLaunch);
 }
 
-// Called when the game starts or when spawned
 void AInteractableActor::BeginPlay()
 {
 	Super::BeginPlay();
@@ -47,8 +43,6 @@ void AInteractableActor::CheckForInteractPressed()
 	for(AMyCharacter* player : overlappingPlayers) {
 		if (player->Interacted) {
 			OnInteract(player);
-			//Figure out why player index not working
-			//GEngine.AddOnScreenMessage()
 		}
 	}
 }
@@ -62,7 +56,6 @@ void AInteractableActor::OnInteract(AMyCharacter* player)
 	}
 }
 
-// Called every frame
 void AInteractableActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -87,6 +80,10 @@ void AInteractableActor::Tick(float DeltaTime)
 	}
 }
 
+//using overlaps can cause the overlappingPlayers collection to be modified while it is being iterated through. 
+//Instead it is better to check if players are overlapping before and after we iterate through the collection and check for interaction.
+// 
+//(leaving this code here for portfolio documentation purposes.)
 void AInteractableActor::OnTriggerBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if (OtherActor->ActorHasTag("Player")) {

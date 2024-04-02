@@ -12,15 +12,13 @@
 #include <Internationalization/Text.h>
 #include "Interactables/InteractableActor.h"
 
-// Sets default values
 ATrain::ATrain()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	CanMove = false;
 	Fuel = MaxFuel;
 	currentTrainState = ETrainState::starting;
-	graceTimeLeft = GraceTime;
+	GraceTimeRemaining = GameOverGraceTime;
 }
 
 void ATrain::StartTrain()
@@ -101,7 +99,6 @@ FVector ATrain::GetDeadPlayerHolderLocation()
 	return FVector(0, 0, 0);
 }
 
-// Called when the game starts or when spawned
 void ATrain::BeginPlay()
 {
 	Super::BeginPlay();
@@ -177,7 +174,6 @@ void ATrain::IncrementTotalMeters()
 	}
 }
 
-// Called every frame
 void ATrain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -190,16 +186,6 @@ void ATrain::Tick(float DeltaTime)
 	if (currentLocation.Y >= targetYPos) {
 		GetWorld()->GetSubsystem<UGameManagerWSS>()->SpawnNewChunk();
 	}
-
-	/*if (!HasFuel() || leverState == ELeverState::stop && currentState == ETrainState::accelerating) {
-		SetTrainState(ETrainState::decelerating);
-	}
-	if (leverState == ELeverState::move && HasFuel() && currentState != ETrainState::accelerating) {
-		SetTrainState(ETrainState::accelerating);
-	}*/
-	//DrawDebugBox(GetWorld(), fuelDeposit->GetComponentLocation(), fuelDeposit->GetScaledBoxExtent(), FColor::Orange, false, -1.0f, 0U, 10.0f);
-	//DrawDebugBox(GetWorld(), startBox->GetComponentLocation(), startBox->GetScaledBoxExtent(), FColor::Green, false, -1.0f, 0U, 10.0f);
-	//DrawDebugBox(GetWorld(), stopBox->GetComponentLocation(), stopBox->GetScaledBoxExtent(), FColor::Red, false, -1.0f, 0U, 10.0f);
 	UpdateFuelState();
 }
 
@@ -241,16 +227,13 @@ void ATrain::StartHordeEncounter()
 bool ATrain::AddFuel() {
 	if (!CanMove) {
 		GetWorld()->GetTimerManager().SetTimer(startTimerHandle, this, &ATrain::TrainCanMove, 1.0, false);
-		//TrainCanMove();
 	}
 	if (Fuel + 1 <= MaxFuel) {
 		Fuel++;
 		NotifyFuelAdded();
-		//GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("fuel = %f"), Fuel));
 		return true;
 	}
 	else {
-		//GEngine->AddOnScreenDebugMessage(1, 2.0f, FColor::Red, FString::Printf(TEXT("fuel full. Max fuel = %f"), MaxFuel));
 		return false;
 	}
 }
@@ -278,14 +261,12 @@ void ATrain::UpdateFuelState()
 		//notify failed
 		if (!countingDownGameOver && !GetWorld()->GetSubsystem<UGameManagerWSS>()->gameEnded) {
 			countingDownGameOver = true;
-			//NotifyTrainStop();
-			graceTimeLeft = GraceTime;
+			GraceTimeRemaining = GameOverGraceTime;
 			GetWorld()->GetTimerManager().SetTimer(countdown, this, &ATrain::DecrementGameOverCounter, 1, true);
 		}
 	}
 	if (countingDownGameOver) {
 		if (HasFuel()) {
-			//NotifyTrainStart();
 			GetWorld()->GetTimerManager().ClearTimer(countdown);
 			countingDownGameOver = false;
 		}
@@ -306,11 +287,11 @@ FVector ATrain::GetRandomEncounterSpawnPos()
 void ATrain::DecrementGameOverCounter()
 {
 	NotifyGameOverCounter();
-	if (graceTimeLeft <= 0 && !HasFuel()) {
+	if (GraceTimeRemaining <= 0 && !HasFuel()) {
 		GetWorld()->GetTimerManager().ClearTimer(countdown);
 		GetWorld()->GetSubsystem<UGameManagerWSS>()->GameOver(0);
 	}
-	graceTimeLeft--;
+	GraceTimeRemaining--;
 }
 
 bool ATrain::IsTrainStopped()
@@ -354,12 +335,8 @@ void ATrain::OnPlowBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 	}
 	if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(OtherActor)) {
 		
-		//GEngine->AddOnScreenDebugMessage(1, 3, FColor::Red, TEXT("TRAIN HIT ENEMY BOI"));
 		enemy->TakeDamage(0, currentTrainSpeed * damageMultiplier, GetActorLocation(), currentTrainSpeed * launchMultiplier, true);
 		NotifyTrainHitEnemy();
-		/*if (enemy->EnemyState == EEnemyState::Dead) {
-			enemy->Destroy();
-		}*/
 	}
 	if (AMyCharacter* player = Cast<AMyCharacter>(OtherActor)) {
 		player->TakeDamage(playerDamage);
@@ -375,7 +352,6 @@ void ATrain::OnPlowBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 	if (OtherActor->Tags.Contains("Obstacle")) {
 		currentTrainSpeed *= -1;
 		isReversing = true;
-		//SetTrainState(ETrainState::decelerating);
 		ToggleTrainState();
 		NotifyTrainHitObstacle();
 		if (AObstacle* obstacle = Cast<AObstacle>(OtherActor)) {
