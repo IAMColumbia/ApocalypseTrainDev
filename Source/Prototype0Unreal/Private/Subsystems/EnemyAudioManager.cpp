@@ -87,7 +87,7 @@ UAudioComponent* AEnemyAudioManager::PlaySound(USoundBase* soundToPlay, FVector 
 
 void AEnemyAudioManager::InitilizeComponents()
 {
-	int maxvoices = 10;
+	int maxvoices = 5;
 	for (int i = 0; i < maxvoices; i++) {
 		FString AudioComponentName = FString::Printf(TEXT("DamagedComponent %d"), i);
 		UAudioComponent* comp = CreateDefaultSubobject<UAudioComponent>(*AudioComponentName, true);
