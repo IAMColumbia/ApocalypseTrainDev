@@ -49,6 +49,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FVector GetRandomPlayerLocation();
 
+	UFUNCTION(BlueprintCallable)
+	bool AnyPlayerIsCarrying();
 
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

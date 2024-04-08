@@ -112,6 +112,16 @@ FVector UPlayerManagerWSS::GetRandomPlayerLocation()
 	return Players[player]->GetActorLocation();
 }
 
+bool UPlayerManagerWSS::AnyPlayerIsCarrying()
+{
+	for (AMyCharacter* c : Players) {
+		if (c->Carrying) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool UPlayerManagerWSS::AllPlayersDead()
 {
 	int deadPlayers = 0;
