@@ -54,7 +54,7 @@ void AEnemySpawner::KillRemainingEncounterEnemies()
 {
 	for (AEnemyCharacter* e : encounterEnemies) {
 		if (e->isSpawned()) {
-			e->TakeDamage(0, 10000000, e->GetActorLocation(), 0, false);
+			e->KillEnemy(false);
 		}
 	}
 	encounterEnemies.Empty();
@@ -145,6 +145,13 @@ AEnemyCharacter* AEnemySpawner::SpawnPooledEnemy(FVector spawnLocation, FRotator
 {
 	int encountersCompleted = GetWorld()->GetSubsystem<UGameManagerWSS>()->HordesDefeated;
 	int enemyType = FMath::RandRange(0,encountersCompleted);
+	//make non-normal enemies a bit more rare
+	if (enemyType != 0) {
+		int shouldSpawnNormalEnemyInstead = FMath::RandRange(0, 3);
+		if (shouldSpawnNormalEnemyInstead == 0) {
+			enemyType = 0;
+		}
+	}
 	enemyType = FMath::Clamp(enemyType, 0, enemyPoolArray.Num() - 1);
 	if (!enemyPoolArray[enemyType].IsEmpty()) {
 		for (AEnemyCharacter* enemy : enemyPoolArray[enemyType]) {

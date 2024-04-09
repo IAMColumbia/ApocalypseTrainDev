@@ -6,6 +6,7 @@
 #include "Train.h"
 #include "Spawners/EnemySpawner.h"
 #include <Kismet/GameplayStatics.h>
+#include "Subsystems/MenuManager.h"
 
 float UGameManagerWSS::GetPriceInflation()
 {
@@ -154,16 +155,7 @@ void UGameManagerWSS::GameOver(int loseType)
 {
 	if (!gameEnded) {
 		gameEnded = true;
-		float delayTime = 8;
-		if (loseType == 0) {
-			GEngine->AddOnScreenDebugMessage(-1, delayTime, FColor::Red, FString::Printf(TEXT("Game Over \nTrain Out Of Fuel")), true, FVector2D(10, 10));
-		}
-		if (loseType == 1) {
-			GEngine->AddOnScreenDebugMessage(-1, delayTime, FColor::Red, FString::Printf(TEXT("Game Over \nAll Players Died")), true, FVector2D(10, 10));
-		}
-		
-		FTimerHandle resetTimer;
-		GetWorld()->GetTimerManager().SetTimer(resetTimer, this, &UGameManagerWSS::RestartGame, delayTime, true);
+		menuManager->GameOver(loseType);
 	}
 }
 

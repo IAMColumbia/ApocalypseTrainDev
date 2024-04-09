@@ -101,10 +101,16 @@ bool AEnemyCharacter::TakeDamage(float distance, float damage, FVector sourcePos
 	Knockback(knockbackDir, launchForce);
 	//LaunchCharacter((GetActorLocation()-sourcePos) * launchForce,true, true);
 	if (currentHealth <= 0) {
-		EnemyState = EEnemyState::Dead;
-		EnemyKilled(dropLoot);
+		KillEnemy(dropLoot);
 		return true;
 	}
+	return false;
+}
+
+bool AEnemyCharacter::KillEnemy(bool dropLoot)
+{
+	EnemyState = EEnemyState::Dead;
+	EnemyKilled(dropLoot);
 	return false;
 }
 

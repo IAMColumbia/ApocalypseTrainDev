@@ -34,6 +34,7 @@ public:
 	class AChunkSpawner* chunkSpawner;
 	class AEnemySpawner* enemySpawner;
 	class ATrain* train;
+	class AMenuManager* menuManager;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float CurrentYPos;

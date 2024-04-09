@@ -86,6 +86,9 @@ public:
 	bool TakeDamage(float distance, float damage, FVector sourcePos, float launchForce, bool dropLoot);
 
 	UFUNCTION(BlueprintCallable)
+	bool KillEnemy(bool dropLoot);
+
+	UFUNCTION(BlueprintCallable)
 	void Knockback(FVector direction, float force);
 	
 	UFUNCTION(BlueprintCallable)
