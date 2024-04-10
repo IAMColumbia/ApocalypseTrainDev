@@ -35,6 +35,7 @@ public:
 	class AEnemySpawner* enemySpawner;
 	class ATrain* train;
 	class AMenuManager* menuManager;
+	class AMusicManager* musicManager;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	float CurrentYPos;
@@ -93,6 +94,8 @@ public:
 	float GetPriceInflation();
 
 	void EnemyKilled();
+
+	void OnTutorialExit();
 
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

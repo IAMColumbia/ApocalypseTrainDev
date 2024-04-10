@@ -7,6 +7,7 @@
 #include "Spawners/EnemySpawner.h"
 #include <Kismet/GameplayStatics.h>
 #include "Subsystems/MenuManager.h"
+#include "Subsystems/MusicManager.h"
 
 float UGameManagerWSS::GetPriceInflation()
 {
@@ -20,6 +21,11 @@ void UGameManagerWSS::EnemyKilled()
 		GEngine->AddOnScreenDebugMessage(-1, 3, FColor::Red, FString::Printf(TEXT("%d killed out of %d"), enemySpawner->enemiesKilledThisEncounter, enemySpawner->enemiesPerEncounter));
 		enemySpawner->DisplayKillCounter(enemySpawner->enemiesPerEncounter - enemySpawner->enemiesKilledThisEncounter);
 	}
+}
+
+void UGameManagerWSS::OnTutorialExit()
+{
+	musicManager->PlayMainNotify();
 }
 
 void UGameManagerWSS::Initialize(FSubsystemCollectionBase& Collection) {
@@ -119,6 +125,7 @@ bool UGameManagerWSS::IsOutOfBackBounds(FVector actorLocation)
 void UGameManagerWSS::OnTrainAccelerating()
 {
 	enemySpawner->StopEncounterSpawner();
+	
 }
 
 void UGameManagerWSS::OnTrainStopped()
@@ -179,6 +186,7 @@ void UGameManagerWSS::ApproachingStation()
 		train->StartHordeEncounter();
 		enemySpawner->StartEncounterSpawner();
 		//enemySpawner->PriceInflation++;
+		musicManager->PlayEncounterNotify();
 	}
 }
 
@@ -192,6 +200,7 @@ void UGameManagerWSS::EnterStation()
 		train->Stopped = false;
 		enemySpawner->IncreaseEnemyDifficulty();
 		enemySpawner->StopAllEncounterSpawning();
+		musicManager->PlayPickupNotify();
 	}
 }
 
@@ -202,6 +211,7 @@ void UGameManagerWSS::ExitStation()
 		train->Stopped = false;
 		train->StartTrain();
 		IsInShopSequence = false;
+		musicManager->PlayMainNotify();
 	}
 }
 

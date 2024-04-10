@@ -49,6 +49,7 @@ void ATrain::MovementUpdate()
 			}
 			if (GetActorLocation().Y > TutorialEnd) {
 				SetTrainState(ETrainState::accelerating);
+				GetWorld()->GetSubsystem<UGameManagerWSS>()->OnTutorialExit();
 			}
 			break;
 		case ETrainState::accelerating:
