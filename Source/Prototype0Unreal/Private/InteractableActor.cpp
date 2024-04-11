@@ -56,11 +56,16 @@ void AInteractableActor::OnInteract(AMyCharacter* player)
 	}
 }
 
+bool AInteractableActor::CanPlayerInteract(AMyCharacter* player)
+{
+	return true;
+}
+
 void AInteractableActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	for(AMyCharacter* c : GetWorld()->GetSubsystem<UPlayerManagerWSS>()->Players) {
-		if (IsOverlappingActor(c) && !overlappingPlayers.Contains(c)) {
+		if (IsOverlappingActor(c) && !overlappingPlayers.Contains(c) && CanPlayerInteract(c)) {
 			overlappingPlayers.Add(c);
 			PlayersOverlapping();
 		}

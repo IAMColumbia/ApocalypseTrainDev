@@ -95,7 +95,7 @@ void ATurret::VisionSweep()
 			}
 		}
 
-		DrawDebugLine(GetWorld(), ConeOrigin, TraceEnd, FColor::Red, false, 0.1f, 0, 2);
+		//DrawDebugLine(GetWorld(), ConeOrigin, TraceEnd, FColor::Red, false, 0.1f, 0, 2);
 	}
 }
 

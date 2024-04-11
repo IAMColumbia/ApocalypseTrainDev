@@ -32,6 +32,9 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool Dispensing;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool CanBuy;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int CostOfItem;
 

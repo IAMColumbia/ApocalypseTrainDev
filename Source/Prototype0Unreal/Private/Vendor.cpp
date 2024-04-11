@@ -21,6 +21,9 @@ void AVendor::BeginPlay()
 
 void AVendor::OnInteract(AMyCharacter* player)
 {
+	if (!CanBuy) {
+		return;
+	}
 	if (player->Carrying) {
 		return;
 	}

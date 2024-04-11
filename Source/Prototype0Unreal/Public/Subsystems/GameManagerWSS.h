@@ -27,6 +27,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int HordesDefeated;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	EGameState CurrentGameState;
 
 	bool EncounterActive();

@@ -201,6 +201,7 @@ void UGameManagerWSS::EnterStation()
 		enemySpawner->IncreaseEnemyDifficulty();
 		enemySpawner->StopAllEncounterSpawning();
 		musicManager->PlayPickupNotify();
+		enemySpawner->PriceInflation *= 2;
 	}
 }
 

@@ -42,6 +42,8 @@ protected:
 
 	bool wasInteracted;
 
+	virtual bool CanPlayerInteract(AMyCharacter* player);
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
