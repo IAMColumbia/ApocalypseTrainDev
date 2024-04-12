@@ -213,6 +213,7 @@ void UGameManagerWSS::ExitStation()
 		train->StartTrain();
 		IsInShopSequence = false;
 		musicManager->PlayMainNotify();
+		train->IncreaseDifficulty();
 	}
 }
 

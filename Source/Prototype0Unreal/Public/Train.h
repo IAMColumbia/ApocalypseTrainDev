@@ -30,7 +30,12 @@ public:
 	// Sets default values for this actor's properties
 	ATrain();
 
-	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Difficulty")
+	float trainSpeedIncrease;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Difficulty")
+	float burnRateIncrease;
+
+	void IncreaseDifficulty();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	ELeverState leverState;

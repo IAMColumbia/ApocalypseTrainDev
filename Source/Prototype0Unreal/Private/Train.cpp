@@ -21,6 +21,12 @@ ATrain::ATrain()
 	GraceTimeRemaining = GameOverGraceTime;
 }
 
+void ATrain::IncreaseDifficulty()
+{
+	burnRate += burnRateIncrease;
+	MaxTrainSpeed += trainSpeedIncrease;
+}
+
 void ATrain::StartTrain()
 {
 	if (HasFuel() && currentTrainState != ETrainState::accelerating) {
