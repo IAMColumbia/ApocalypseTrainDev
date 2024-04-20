@@ -16,7 +16,7 @@ public:
 	AObstacle();
 	UPROPERTY(EditAnywhere, BlueprintReadWrite);
 	float MaxObstacleHealth;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly);
+	UPROPERTY(EditAnywhere, BlueprintReadWrite);
 	float currentHealth;
 
 protected:
