@@ -14,7 +14,8 @@ AInteractableActor::AInteractableActor()
 void AInteractableActor::DropObject(FVector directionToLaunch)
 {
 	state = EInteractableState::Dropped;
-	OnDropped(directionToLaunch);
+	float upwardForce = 0.5f;
+	OnDropped((directionToLaunch*0.8f) + FVector(0,0,upwardForce));
 }
 
 void AInteractableActor::BeginPlay()

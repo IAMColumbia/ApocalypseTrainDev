@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "Characters/RangedEnemy.h"
+#include "Subsystems/PlayerManagerWSS.h"
+#include "Weapons/Projectiles/EnemyProjectile.h"
 
 // Sets default values
 ARangedEnemy::ARangedEnemy()
@@ -15,14 +16,41 @@ ARangedEnemy::ARangedEnemy()
 void ARangedEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-	
+    playerManager = GetWorld()->GetSubsystem<UPlayerManagerWSS>();
+    
 }
+
+FVector ARangedEnemy::getTargetLocation()
+{
+    return playerManager->GetRandomPlayerLocation();
+}
+
+void ARangedEnemy::FireShot()
+{
+    AEnemyProjectile* a = Cast<AEnemyProjectile>(GetWorld()->SpawnActorAbsolute(enemyProjectile, GetActorTransform()));
+    a->Launch(GetLaunchVector(GetActorLocation(), getTargetLocation())+ FVector(0,0,1000));
+    GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::FireShot, fireRate + FMath::RandRange(-randomFireRateDeviation, randomFireRateDeviation), false);
+}
+
+
 
 // Called every frame
 void ARangedEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ARangedEnemy::SpawnPooledCharacter(FVector location, FRotator rotation, bool setTarget, FVector target)
+{
+    Super::SpawnPooledCharacter(location, rotation, setTarget, target);
+    GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::FireShot, fireRate, false);
+}
+
+void ARangedEnemy::DespawnPooledCharacter()
+{
+    Super::DespawnPooledCharacter();
+    GetWorld()->GetTimerManager().ClearTimer(shootTimer);
 }
 
 

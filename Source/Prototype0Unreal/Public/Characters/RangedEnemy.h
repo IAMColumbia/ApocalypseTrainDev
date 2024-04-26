@@ -3,11 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EnemyCharacter.h"
 #include "GameFramework/Actor.h"
 #include "RangedEnemy.generated.h"
 
 UCLASS()
-class PROTOTYPE0UNREAL_API ARangedEnemy : public AActor
+class PROTOTYPE0UNREAL_API ARangedEnemy : public AEnemyCharacter
 {
 	GENERATED_BODY()
 	
@@ -21,16 +22,35 @@ protected:
 
 	FVector getTargetLocation();
 
-	void FireShot();
 
 	float CalculateLaunchVelocity(float gravity, float distance, float angle);
 
 	float CalculateLaunchAngle(float gravity, float distance, float initialVelocity);
 
-public:	
+	class UPlayerManagerWSS* playerManager;
 
+	FTimerHandle shootTimer;
+
+	
+
+public:	
+	UFUNCTION(BlueprintCallable)
+	void FireShot();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FVector GetLaunchVector(FVector StartPosition, FVector TargetPosition);
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf<AActor> enemyProjectile;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float fireRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float randomFireRateDeviation;
+
+	virtual void SpawnPooledCharacter(FVector location, FRotator rotation, bool setTarget, FVector target) override;
+
+	virtual void DespawnPooledCharacter() override;
 };

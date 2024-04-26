@@ -108,6 +108,12 @@ void UPlayerManagerWSS::ShareCoins(int coins)
 
 FVector UPlayerManagerWSS::GetRandomPlayerLocation()
 {
+	if (Players.Num() == 0) {
+		return FVector(0, 0, 0);
+	}
+	if (Players.Num() == 1) {
+		return Players[0]->GetActorLocation();
+	}
 	int player = FMath::RandRange(0, NumActivePlayers()-1);
 	return Players[player]->GetActorLocation();
 }
