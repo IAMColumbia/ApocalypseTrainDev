@@ -108,6 +108,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buffs")
 	float SpeedBuff;
 
+	
+
 	float baseHealth;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
@@ -203,6 +205,33 @@ protected:
 	void SetMovementSpeed(float speed);
 
 public:	
+#pragma region UpgradeAmounts
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UpgradeAmounts")
+	float DamageUpgrade;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UpgradeAmounts")
+	float SpeedUpgrade;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UpgradeAmounts")
+	float HandlingUpgrade;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UpgradeAmounts")
+	float MaxHealthUpgrade;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UpgradeAmounts")
+	float RegenRateUpgrade;
+
+#pragma endregion
+
+#pragma region StatLevels
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
+	int DamageLevel;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
+	int HealthLevel;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Levels")
+	int SpeedLevel;
+#pragma endregion
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buffs")
+	float HandelingBuff;
+
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void NotifyShot();

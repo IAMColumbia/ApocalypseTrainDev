@@ -109,6 +109,12 @@ public:
     UFUNCTION(BlueprintImplementableEvent)
     void OwnerDied();
 
+    UFUNCTION(BlueprintCallable)
+    virtual void ApplyPlayerKnockback();
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    float KnockbackPlayerForce;
+
 protected:
     // Called when the game starts or when spawned
     virtual void BeginPlay() override;

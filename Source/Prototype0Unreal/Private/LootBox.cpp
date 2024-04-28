@@ -24,7 +24,7 @@ void ALootBox::BeginPlay()
 
 FText getUpgradeText(float value, EUpgradeType type)
 {
-	return FText::Format(INVTEXT("+{0} {1}"), value, StaticEnum<EUpgradeType>()->GetDisplayNameTextByValue((uint64)type));
+	return FText::Format(INVTEXT("Level {0} {1}"), value, StaticEnum<EUpgradeType>()->GetDisplayNameTextByValue((uint64)type));
 }
 
 
@@ -92,15 +92,15 @@ void ALootBox::OnInteract(AMyCharacter* player)
 	switch (random) {
 	case 0:
 		player->ApplyUpgrade(upgrade, amount);
-		Interacted(getUpgradeText(amount, upgrade), player->PlayerColor);
+		Interacted(getUpgradeText(player->DamageLevel, upgrade), player->PlayerColor);
 		break;
 	case 1:
 		player->ApplyUpgrade(upgrade, amount * 4);
-		Interacted(getUpgradeText(20, upgrade), player->PlayerColor);
+		Interacted(getUpgradeText(player->HealthLevel, upgrade), player->PlayerColor);
 		break;
 	case 2:
 		player->ApplyUpgrade(upgrade, amount * 3);
-		Interacted(getUpgradeText(15, upgrade), player->PlayerColor);
+		Interacted(getUpgradeText(player->SpeedLevel, upgrade), player->PlayerColor);
 		break;
 	}
 	

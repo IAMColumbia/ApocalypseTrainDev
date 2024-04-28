@@ -7,7 +7,7 @@
 
 FText AStatVendor::getUpgradeText(float value, EUpgradeType type)
 {
-	return FText::Format(INVTEXT("+{0} {1}"), value, StaticEnum<EUpgradeType>()->GetDisplayNameTextByValue((uint64)type));
+	return FText::Format(INVTEXT("Level {0} {1}"), value, StaticEnum<EUpgradeType>()->GetDisplayNameTextByValue((uint64)type));
 }
 
 FText AStatVendor::getInfoText()
@@ -31,7 +31,20 @@ void AStatVendor::OnInteract(AMyCharacter* player)
 			//GEngine->AddOnScreenDebugMessage(-1, 3, player->GetPlayerColor(), FString::Printf(TEXT("UpgradeAmount %f"), UpgradeAmount));
 			player->ApplyUpgrade(upgradeType, UpgradeAmount);
 			//GEngine->AddOnScreenDebugMessage(-1, 3, player->GetPlayerColor(), FString::Printf(TEXT("Index: %d"), player->PlayerIndex));
-			PurchasedUpgrade(getUpgradeText(UpgradeAmount, upgradeType), player->PlayerColor);
+			float upgradeLevel = 0;
+			switch (upgradeType) {
+			case EUpgradeType::speed:
+				upgradeLevel = player->SpeedLevel;
+				break;
+			case EUpgradeType::damage:
+				upgradeLevel = player->DamageLevel;
+				break;
+			case EUpgradeType::health:
+				upgradeLevel = player->HealthLevel;
+				break;
+			}
+			upgradeLevel += 1;
+			PurchasedUpgrade(getUpgradeText(upgradeLevel, upgradeType), player->PlayerColor);
 		}
 	}
 }

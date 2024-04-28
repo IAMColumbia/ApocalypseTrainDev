@@ -32,6 +32,15 @@ bool AWeapon::IsOwnerDead()
 	return false;
 }
 
+void AWeapon::ApplyPlayerKnockback()
+{
+	float force = (KnockbackPlayerForce - OwnerCharacter->HandelingBuff);
+	if (force < 0) {
+		force = 0;
+	}
+	OwnerCharacter->LaunchCharacter((BulletSpawn->GetForwardVector() * -1) * force, true, true);
+}
+
 // Called when the game starts or when spawned
 void AWeapon::BeginPlay()
 {
@@ -200,6 +209,7 @@ void AWeapon::UpdateAttackingState()
 	if (Attacking && Reloaded) {
 		if (!IsWeaponClipping()) {
 			NotifyFiredShot();
+			ApplyPlayerKnockback();
 			ShootProjectile();
 			Reloaded = false;
 			GetWorld()->GetTimerManager().SetTimer(reloadTimerHandle, this, &AWeapon::Reload, FireRate, false);
