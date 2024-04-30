@@ -11,7 +11,21 @@ class AWeapon;
 class AMeleeWeapon;
 
 UENUM(BlueprintType)
-enum class EUpgradeType : uint8{damage UMETA(DisplayName="Damage"), health UMETA(DisplayName = "Health"), speed UMETA(DisplayName = "Speed")
+enum class EUpgradeType : uint8{damage UMETA(DisplayName="Damage"), health UMETA(DisplayName = "Health"), speed UMETA(DisplayName = "Handling")
+};
+
+USTRUCT(BlueprintType)
+struct FPlayerInfo {
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FColor PlayerColor;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int Kills;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int FuelDeposited;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int playerNumber;
 };
 
 UCLASS()
@@ -41,6 +55,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int TotalDeaths;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	int TotalFuelDeposited;
+
+	UFUNCTION(BlueprintCallable)
+	FPlayerInfo GetPlayerInfo();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int Coins;

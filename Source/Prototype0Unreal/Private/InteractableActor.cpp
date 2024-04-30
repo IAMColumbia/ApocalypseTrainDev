@@ -52,6 +52,7 @@ void AInteractableActor::OnInteract(AMyCharacter* player)
 {
 	if (!player->Carrying) {
 		player->PickupItem(this);
+		LastCarryingPlayer = player;
 		state = EInteractableState::Carried;
 		return;
 	}
@@ -110,6 +111,13 @@ void AInteractableActor::OnTriggerEndOverlap(UPrimitiveComponent* OverlappedComp
 			}*/
 		}
 
+	}
+}
+
+void AInteractableActor::OnFuelAddedToTrain()
+{
+	if (LastCarryingPlayer != NULL) {
+		LastCarryingPlayer->TotalFuelDeposited++;
 	}
 }
 

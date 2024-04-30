@@ -16,7 +16,8 @@ AVendor::AVendor()
 void AVendor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Dispensing = false;
+	CanBuy = true;
 }
 
 void AVendor::OnInteract(AMyCharacter* player)

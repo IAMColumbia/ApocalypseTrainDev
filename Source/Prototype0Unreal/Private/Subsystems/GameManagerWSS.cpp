@@ -161,6 +161,7 @@ int UGameManagerWSS::TotalChunksSpawned()
 void UGameManagerWSS::GameOver(int loseType)
 {
 	if (!gameEnded) {
+		musicManager->PlayGameOverNotify();
 		gameEnded = true;
 		menuManager->GameOver(loseType);
 	}

@@ -52,6 +52,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool AnyPlayerIsCarrying();
 
+	UFUNCTION(BlueprintCallable)
+	TArray<struct FPlayerInfo> GetPlayerInfos();
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 

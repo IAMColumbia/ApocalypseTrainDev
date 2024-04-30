@@ -31,12 +31,12 @@ void AMenuManager::Tick(float DeltaTime)
 void AMenuManager::GameOver(int GameOverReason)
 {
 	float delayTime = 8;
-	if (GameOverReason == 0) {
+	/*if (GameOverReason == 0) {
 		GEngine->AddOnScreenDebugMessage(-1, delayTime, FColor::Red, FString::Printf(TEXT("Game Over \nTrain Out Of Fuel")), true, FVector2D(10, 10));
 	}
 	if (GameOverReason == 1) {
 		GEngine->AddOnScreenDebugMessage(-1, delayTime, FColor::Red, FString::Printf(TEXT("Game Over \nAll Players Died")), true, FVector2D(10, 10));
-	}
+	}*/
 
 	GameOverNotify(GameOverReason);
 	//FTimerHandle resetTimer;

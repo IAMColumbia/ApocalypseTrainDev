@@ -66,4 +66,10 @@ public:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void NoPlayersOverlapping();
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	AMyCharacter* LastCarryingPlayer;
+
+	UFUNCTION(BlueprintCallable)
+	void OnFuelAddedToTrain();
 };

@@ -35,4 +35,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayEncounterNotify();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayGameOverNotify();
+
 };

@@ -128,6 +128,16 @@ bool UPlayerManagerWSS::AnyPlayerIsCarrying()
 	return false;
 }
 
+TArray<struct FPlayerInfo> UPlayerManagerWSS::GetPlayerInfos()
+{
+	TArray<struct FPlayerInfo> infos = TArray<struct FPlayerInfo>();
+	for(AMyCharacter* c : Players)
+	{
+		infos.Add(c->GetPlayerInfo());
+	}
+	return infos;
+}
+
 bool UPlayerManagerWSS::AllPlayersDead()
 {
 	int deadPlayers = 0;

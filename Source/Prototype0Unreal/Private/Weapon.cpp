@@ -34,7 +34,7 @@ bool AWeapon::IsOwnerDead()
 
 void AWeapon::ApplyPlayerKnockback()
 {
-	float force = (KnockbackPlayerForce - OwnerCharacter->HandelingBuff);
+	float force = (KnockbackPlayerForce / OwnerCharacter->HandelingBuff);
 	if (force < 0) {
 		force = 0;
 	}

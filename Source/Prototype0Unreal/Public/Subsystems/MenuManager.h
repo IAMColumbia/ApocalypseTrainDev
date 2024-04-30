@@ -6,6 +6,9 @@
 #include "GameFramework/Actor.h"
 #include "MenuManager.generated.h"
 
+
+
+
 UCLASS()
 class PROTOTYPE0UNREAL_API AMenuManager : public AActor
 {

@@ -82,7 +82,7 @@ void AMyCharacter::BeginPlay()
 	CurrentMeleeWeapon = Cast<AMeleeWeapon>(GetWorld()->SpawnActor(MeleeWeapon));
 	CurrentMeleeWeapon->OwnerCharacter = this;
 	HolsterMeleeWeapon();
-	
+	HandelingBuff = 1;
 }
 
 void AMyCharacter::OnPlayerSpawn() {
@@ -148,6 +148,7 @@ void AMyCharacter::InteractPressed() {
 				if (carriedObject != NULL) {
 					if (trainPtr->AddFuel()) {
 						carriedObject->Destroy();
+						TotalFuelDeposited++;
 					}
 				}
 			}
@@ -205,6 +206,16 @@ void AMyCharacter::CheckDropItem()
 	}
 }
 
+
+FPlayerInfo AMyCharacter::GetPlayerInfo()
+{
+	FPlayerInfo info = FPlayerInfo();
+	info.PlayerColor = GetPlayerColor();
+	info.Kills = TotalKills;
+	info.FuelDeposited = TotalFuelDeposited;
+	info.playerNumber = PlayerIndex;
+	return info;
+}
 
 void AMyCharacter::LoseCoins(int coinsToLose)
 {
