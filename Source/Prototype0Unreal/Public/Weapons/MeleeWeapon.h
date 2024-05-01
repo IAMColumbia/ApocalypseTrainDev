@@ -43,9 +43,21 @@ public:
 
 	bool CanDamage;
 
+	UFUNCTION(BlueprintCallable)
+	void CallAttackEvent();
+
+	UFUNCTION(BlueprintCallable)
+	void CallIdleEvent();
+
 	UFUNCTION(BlueprintImplementableEvent)
 	void Attacking();
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void Idle();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void HitObstacle();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void HitEnemy();
 };

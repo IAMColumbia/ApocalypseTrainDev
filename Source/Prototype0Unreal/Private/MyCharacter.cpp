@@ -413,16 +413,16 @@ void AMyCharacter::BashPressed()
 		Bashing = true;
 		HolsterWeapon();
 		AttachMeleeWeapon();
-		CurrentMeleeWeapon->CanDamage = true;
-		CurrentMeleeWeapon->Attacking();
+		//CurrentMeleeWeapon->CanDamage = true;
+		//CurrentMeleeWeapon->Attacking();
 	}
 }
 
 
 void AMyCharacter::BashFinished()
 {
-	CurrentMeleeWeapon->CanDamage = false;
-	CurrentMeleeWeapon->Idle();
+	//CurrentMeleeWeapon->CanDamage = false;
+	//CurrentMeleeWeapon->Idle();
 	FRotator Rot = GetActorRotation();
 	Rot.Pitch += 90.0f;
 	CurrentMeleeWeapon->SetActorRelativeRotation(Rot);

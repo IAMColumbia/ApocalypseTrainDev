@@ -203,6 +203,7 @@ void UGameManagerWSS::EnterStation()
 		enemySpawner->StopAllEncounterSpawning();
 		musicManager->PlayPickupNotify();
 		enemySpawner->PriceInflation *= 2;
+		chunkSpawner->NotifyHordeDefeated(HordesDefeated);
 	}
 }
 

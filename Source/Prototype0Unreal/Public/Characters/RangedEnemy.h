@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "EnemyCharacter.h"
+#include "../Obstacle.h"
 #include "GameFramework/Actor.h"
 #include "RangedEnemy.generated.h"
 
 UCLASS()
-class PROTOTYPE0UNREAL_API ARangedEnemy : public AEnemyCharacter
+class PROTOTYPE0UNREAL_API ARangedEnemy : public AObstacle
 {
 	GENERATED_BODY()
 	
@@ -31,6 +31,7 @@ protected:
 
 	FTimerHandle shootTimer;
 
+
 	
 
 public:	
@@ -50,7 +51,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float randomFireRateDeviation;
 
-	virtual void SpawnPooledCharacter(FVector location, FRotator rotation, bool setTarget, FVector target) override;
+	virtual void DamageObstacle(float damage) override;
 
-	virtual void DespawnPooledCharacter() override;
+	//virtual void SpawnPooledCharacter(FVector location, FRotator rotation, bool setTarget, FVector target) override;
+
+	//virtual void DespawnPooledCharacter() override;
 };

@@ -44,4 +44,7 @@ public:
 
 	void SpawnNextChunk();
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void NotifyHordeDefeated(int hordesDefeated);
+
 };

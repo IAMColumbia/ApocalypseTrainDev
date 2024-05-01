@@ -107,6 +107,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Weapon")
 	TSubclassOf<AMeleeWeapon> MeleeWeapon;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	AMeleeWeapon* CurrentMeleeWeapon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Combat")
@@ -128,7 +129,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buffs")
 	float SpeedBuff;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Buffs")
+	float MaxSpeedBuff;
 
 	float baseHealth;
 

@@ -24,11 +24,13 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool NotDamageable;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	void DamageObstacle(float damage);
+	virtual void DamageObstacle(float damage);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void NotifyDamageObstacle();

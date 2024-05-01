@@ -314,7 +314,7 @@ void AWeapon::SpawnHitVFXType(FHitResult hit)
 {
 	hitLocation = hit.Location;
 	hitNormal = hit.Normal;
-	if (hit.GetActor()->ActorHasTag("Wooden")) {
+	if (hit.GetActor() && hit.GetActor()->ActorHasTag("Wooden")) {
 		SpawnBulletVFX(hitLocation, hitNormal, 1);
 	}
 	else {

@@ -46,6 +46,7 @@ void AMeleeWeapon::OnWeaponBeginOverlap(UPrimitiveComponent* OverlappedComp, AAc
 		if (AObstacle* obstacle = Cast<AObstacle>(OtherActor)) {
 
 			obstacle->DamageObstacle(ObstacleDamage);
+			HitObstacle();
 		}
 		if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(OtherActor)) {
 			if (enemy->TakeDamage(0, EnemyDamage, GetActorLocation(), KnockbackForce, true)) {
@@ -53,7 +54,20 @@ void AMeleeWeapon::OnWeaponBeginOverlap(UPrimitiveComponent* OverlappedComp, AAc
 					OwnerCharacter->OnEnemyKilled();
 				}
 			}
+			HitEnemy();
 		}
 	}
+}
+
+void AMeleeWeapon::CallAttackEvent()
+{
+	CanDamage = true;
+	Attacking();
+}
+
+void AMeleeWeapon::CallIdleEvent()
+{
+	CanDamage = false;
+	Idle();
 }
 

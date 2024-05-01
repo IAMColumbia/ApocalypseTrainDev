@@ -17,7 +17,7 @@ void ARangedEnemy::BeginPlay()
 {
 	Super::BeginPlay();
     playerManager = GetWorld()->GetSubsystem<UPlayerManagerWSS>();
-    
+    GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::FireShot, fireRate + FMath::RandRange(-randomFireRateDeviation, randomFireRateDeviation), false);
 }
 
 FVector ARangedEnemy::getTargetLocation()
@@ -41,17 +41,26 @@ void ARangedEnemy::Tick(float DeltaTime)
 
 }
 
-void ARangedEnemy::SpawnPooledCharacter(FVector location, FRotator rotation, bool setTarget, FVector target)
+void ARangedEnemy::DamageObstacle(float damage)
 {
-    Super::SpawnPooledCharacter(location, rotation, setTarget, target);
-    GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::FireShot, fireRate, false);
+    currentHealth -= FGenericPlatformMath::Abs(damage);
+    NotifyDamageObstacle();
+    if (currentHealth <= 0) {
+        GetWorld()->GetTimerManager().ClearTimer(shootTimer);
+        ObstacleDestroyed();
+    }
 }
-
-void ARangedEnemy::DespawnPooledCharacter()
-{
-    Super::DespawnPooledCharacter();
-    GetWorld()->GetTimerManager().ClearTimer(shootTimer);
-}
+//void ARangedEnemy::SpawnPooledCharacter(FVector location, FRotator rotation, bool setTarget, FVector target)
+//{
+//    Super::SpawnPooledCharacter(location, rotation, setTarget, target);
+//    GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::FireShot, fireRate, false);
+//}
+//
+//void ARangedEnemy::DespawnPooledCharacter()
+//{
+//    Super::DespawnPooledCharacter();
+//    GetWorld()->GetTimerManager().ClearTimer(shootTimer);
+//}
 
 
 // Function to calculate launch velocity
