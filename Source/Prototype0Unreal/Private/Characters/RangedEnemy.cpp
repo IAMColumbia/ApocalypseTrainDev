@@ -22,6 +22,16 @@ void ARangedEnemy::BeginPlay()
     if (playerManager->PlayerHasSpawned()) {
         currentTarget = playerManager->GetRandomPlayer();
     }
+    TSet<UActorComponent*> components = GetComponents();
+    for (UActorComponent* component : components) {
+        if (component->IsA(USceneComponent::StaticClass())) {
+            USceneComponent* sceneComponent = Cast<USceneComponent>(component);
+            if (sceneComponent && sceneComponent->ComponentHasTag("ProjectileSpawn")) {
+                projectileSpawn = sceneComponent;
+            }
+        }
+
+    }
 }
 
 FVector ARangedEnemy::getTargetLocation()
@@ -35,8 +45,8 @@ FVector ARangedEnemy::getTargetLocation()
 void ARangedEnemy::FireShot()
 {
     if (currentTarget != NULL) {
-        AEnemyProjectile* a = Cast<AEnemyProjectile>(GetWorld()->SpawnActorAbsolute(enemyProjectile, GetActorTransform()));
-        a->Launch(GetLaunchVector(GetActorLocation(), getTargetLocation())+ FVector(0,0,1000));
+        AEnemyProjectile* a = Cast<AEnemyProjectile>(GetWorld()->SpawnActorAbsolute(enemyProjectile, projectileSpawn->GetComponentTransform()));
+        a->Launch(GetLaunchVector(projectileSpawn->GetComponentLocation(), getTargetLocation())+ FVector(0,0,1000));
     }
     GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::SetIsAttacking, fireRate + FMath::RandRange(-randomFireRateDeviation, randomFireRateDeviation), false);
     if (playerManager->PlayerHasSpawned()) {

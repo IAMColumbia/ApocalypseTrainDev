@@ -33,6 +33,8 @@ protected:
 	FTimerHandle shootTimer;
 	class AMyCharacter* currentTarget;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USceneComponent* projectileSpawn;
 public:	
 	UFUNCTION(BlueprintCallable)
 	void FireShot();
