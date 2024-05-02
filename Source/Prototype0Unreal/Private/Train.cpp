@@ -346,7 +346,7 @@ void ATrain::OnPlowBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Oth
 		NotifyTrainHitEnemy();
 	}
 	if (AMyCharacter* player = Cast<AMyCharacter>(OtherActor)) {
-		player->TakeDamage(playerDamage);
+		player->TakeDamage(playerDamage, 4);
 		player->LaunchCharacter(GetActorRightVector() * playerLaunchForce, true, true);
 	}
 	if (OtherActor->Tags.Contains("Fuel")) {

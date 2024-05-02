@@ -113,7 +113,7 @@ void AMyCharacter::Tick(float DeltaTime)
 			CanAddFuel = false;
 		}
 		if (gameManager->IsOutOfBounds(GetActorLocation())) {
-			DespawnPlayer();
+			DespawnPlayer(5);
 		}
 	}
 	RegenerateHealth();
@@ -473,7 +473,7 @@ void AMyCharacter::ResetDash() {
 
 #pragma region spawning
 
-void AMyCharacter::TakeDamage(float damageToTake) {
+void AMyCharacter::TakeDamage(float damageToTake, float type) {
 	if (Invincible) {
 		return;
 	}
@@ -481,22 +481,22 @@ void AMyCharacter::TakeDamage(float damageToTake) {
 	NotifyHealthBarWidget();
 	NotifyTakeDamage();
 	if (currentHealth <= 0) {
-		DespawnPlayer();
+		DespawnPlayer(type);
 	}
 }
 
-void AMyCharacter::DespawnPlayer()
+void AMyCharacter::DespawnPlayer(float type)
 {
 	if (IsPlayerDead) {
 		return;
 	}
 	IsPlayerDead = true;
+	NotifyPlayerDied(type);
 	if (IsShooting) {
 		ShootReleased();
 	}
 	CheckDropItem();
 	justDropped = false;
-	NotifyPlayerDied();
 	SetActorLocation(trainPtr->GetDeadPlayerHolderLocation());
 	TotalDeaths++;
 	MaxHealth = baseHealth;

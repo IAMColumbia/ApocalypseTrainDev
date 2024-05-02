@@ -33,7 +33,7 @@ public:
 	virtual void DamageObstacle(float damage);
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void NotifyDamageObstacle();
+	void NotifyDamageObstacle(float damage);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void ObstacleDestroyed();

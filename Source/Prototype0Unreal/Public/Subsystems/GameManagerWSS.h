@@ -53,6 +53,7 @@ public:
 
 	FVector GetRandomEncounterSpawnPos();
 
+	UFUNCTION(BlueprintCallable)
 	FVector GetTrainLocation();
 
 	bool IsOutOfBounds(FVector actorLocation);

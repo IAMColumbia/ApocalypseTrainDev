@@ -28,6 +28,14 @@ struct FPlayerInfo {
 	int playerNumber;
 };
 
+//damage types 
+//4 - train
+//5 - out of bounds
+//0 - zombie
+//1 - explosion
+//2 - river
+//3 - slimed
+
 UCLASS()
 class PROTOTYPE0UNREAL_API AMyCharacter : public ACharacter
 {
@@ -218,7 +226,7 @@ protected:
 	void NotifyStoppedShooting();
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void NotifyPlayerDied();
+	void NotifyPlayerDied(int deathReason);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void NotifyPlayerRespawn();
@@ -310,7 +318,7 @@ public:
 	FVector PlayerColor;
 
 	UFUNCTION(BlueprintCallable, Category = "Combat")
-	void TakeDamage(float damageToTake);
+	void TakeDamage(float damageToTake, float type);
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void NotifyTakeDamage();
@@ -334,11 +342,13 @@ public:
 	void NotifyReloadPercent(float currentTime, float MaxTime);
 
 	bool overlappingInteractable;
+
+	UFUNCTION(BlueprintCallable)
+	void DespawnPlayer(float deathtype);
 private:
 	UPROPERTY(EditAnywhere, meta=(AllowPrivateAccess="true"))
 	TSubclassOf<AActor> ActorToSpawn;
 
-	void DespawnPlayer();
 
 	void RegenerateHealth();
 

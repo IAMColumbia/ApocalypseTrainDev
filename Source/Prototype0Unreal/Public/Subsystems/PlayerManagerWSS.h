@@ -55,6 +55,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	TArray<struct FPlayerInfo> GetPlayerInfos();
 
+	UFUNCTION(BlueprintCallable)
+	AMyCharacter* GetRandomPlayer();
+
+	UFUNCTION(BlueprintCallable)
+	bool PlayerHasSpawned();
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 

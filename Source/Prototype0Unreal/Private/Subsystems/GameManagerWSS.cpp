@@ -102,7 +102,7 @@ bool UGameManagerWSS::IsOutOfBounds(FVector actorLocation)
 	if (actorLocation.Y < train->GetBackBound()|| actorLocation.Y > train->GetFrontBound()) {
 		return true;
 	}
-	if (actorLocation.Z < -100) {
+	if (actorLocation.Z < -400) {
 		return true;
 	}
 	return false;

@@ -138,6 +138,20 @@ TArray<struct FPlayerInfo> UPlayerManagerWSS::GetPlayerInfos()
 	return infos;
 }
 
+AMyCharacter* UPlayerManagerWSS::GetRandomPlayer()
+{
+	int player = FMath::RandRange(0, NumActivePlayers() - 1);
+	return Players[player];
+}
+
+bool UPlayerManagerWSS::PlayerHasSpawned()
+{
+	if (Players.Num() <= 0) {
+		return false;
+	}
+	return true;
+}
+
 bool UPlayerManagerWSS::AllPlayersDead()
 {
 	int deadPlayers = 0;

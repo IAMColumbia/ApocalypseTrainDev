@@ -3,6 +3,7 @@
 #include "Characters/RangedEnemy.h"
 #include "Subsystems/PlayerManagerWSS.h"
 #include "Weapons/Projectiles/EnemyProjectile.h"
+#include "Characters/MyCharacter.h"
 
 // Sets default values
 ARangedEnemy::ARangedEnemy()
@@ -17,22 +18,36 @@ void ARangedEnemy::BeginPlay()
 {
 	Super::BeginPlay();
     playerManager = GetWorld()->GetSubsystem<UPlayerManagerWSS>();
-    GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::FireShot, fireRate + FMath::RandRange(-randomFireRateDeviation, randomFireRateDeviation), false);
+    GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::SetIsAttacking, fireRate + FMath::RandRange(-randomFireRateDeviation, randomFireRateDeviation), false);
+    if (playerManager->PlayerHasSpawned()) {
+        currentTarget = playerManager->GetRandomPlayer();
+    }
 }
 
 FVector ARangedEnemy::getTargetLocation()
 {
-    return playerManager->GetRandomPlayerLocation();
+    if (currentTarget == NULL) {
+        return FVector(0, 0, 0);
+    }
+    return currentTarget->GetActorLocation();
 }
 
 void ARangedEnemy::FireShot()
 {
-    AEnemyProjectile* a = Cast<AEnemyProjectile>(GetWorld()->SpawnActorAbsolute(enemyProjectile, GetActorTransform()));
-    a->Launch(GetLaunchVector(GetActorLocation(), getTargetLocation())+ FVector(0,0,1000));
-    GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::FireShot, fireRate + FMath::RandRange(-randomFireRateDeviation, randomFireRateDeviation), false);
+    if (currentTarget != NULL) {
+        AEnemyProjectile* a = Cast<AEnemyProjectile>(GetWorld()->SpawnActorAbsolute(enemyProjectile, GetActorTransform()));
+        a->Launch(GetLaunchVector(GetActorLocation(), getTargetLocation())+ FVector(0,0,1000));
+    }
+    GetWorld()->GetTimerManager().SetTimer(shootTimer, this, &ARangedEnemy::SetIsAttacking, fireRate + FMath::RandRange(-randomFireRateDeviation, randomFireRateDeviation), false);
+    if (playerManager->PlayerHasSpawned()) {
+        currentTarget = playerManager->GetRandomPlayer();
+    }
 }
 
-
+void ARangedEnemy::SetIsAttacking()
+{
+    IsAttacking = true;
+}
 
 // Called every frame
 void ARangedEnemy::Tick(float DeltaTime)
@@ -44,7 +59,7 @@ void ARangedEnemy::Tick(float DeltaTime)
 void ARangedEnemy::DamageObstacle(float damage)
 {
     currentHealth -= FGenericPlatformMath::Abs(damage);
-    NotifyDamageObstacle();
+    NotifyDamageObstacle(damage);
     if (currentHealth <= 0) {
         GetWorld()->GetTimerManager().ClearTimer(shootTimer);
         ObstacleDestroyed();

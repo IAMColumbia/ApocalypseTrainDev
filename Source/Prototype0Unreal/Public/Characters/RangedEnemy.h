@@ -20,6 +20,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FVector getTargetLocation();
 
 
@@ -30,13 +31,17 @@ protected:
 	class UPlayerManagerWSS* playerManager;
 
 	FTimerHandle shootTimer;
-
-
-	
+	class AMyCharacter* currentTarget;
 
 public:	
 	UFUNCTION(BlueprintCallable)
 	void FireShot();
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsAttacking();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool IsAttacking;
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FVector GetLaunchVector(FVector StartPosition, FVector TargetPosition);
