@@ -99,6 +99,12 @@ public:
 
 	void OnTutorialExit();
 
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	int GetDistanceTraveled();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	int GetHordesDefeated();
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 	

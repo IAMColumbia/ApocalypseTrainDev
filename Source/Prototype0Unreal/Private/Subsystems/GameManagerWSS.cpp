@@ -28,6 +28,19 @@ void UGameManagerWSS::OnTutorialExit()
 	musicManager->PlayMainNotify();
 }
 
+int UGameManagerWSS::GetDistanceTraveled()
+{
+	if (train == NULL) {
+		return 0;
+	}
+	return train->TotalMeters;
+}
+
+int UGameManagerWSS::GetHordesDefeated()
+{
+	return HordesDefeated;
+}
+
 void UGameManagerWSS::Initialize(FSubsystemCollectionBase& Collection) {
 	Super::Initialize(Collection);
 	UE_LOG(LogTemp, Warning, TEXT("GameManager Initialized"));
