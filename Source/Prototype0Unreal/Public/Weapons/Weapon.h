@@ -60,7 +60,7 @@ public:
     float RayOffset;
     UPROPERTY(EditAnywhere, BlueprintReadOnly)
     float RayLength;
-    void GetRayVector(FVector*& rayStart, FVector*& rayEnd);
+    void GetRayVector(FVector* rayStart, FVector* rayEnd);
 
     virtual void DetermineShotWithRay() override;
     UPROPERTY(EditAnywhere, BlueprintReadWrite)

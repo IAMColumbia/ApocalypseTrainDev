@@ -12,7 +12,8 @@ FText AStatVendor::getUpgradeText(float value, EUpgradeType type)
 
 FText AStatVendor::getInfoText()
 {
-	return FText::Format(INVTEXT("{0} - {1}"), CostOfItem, StaticEnum<EUpgradeType>()->GetDisplayNameTextByValue((uint64)upgradeType));
+	//return FText::Format(INVTEXT("{0} - {1}"), CostOfItem, StaticEnum<EUpgradeType>()->GetDisplayNameTextByValue((uint64)upgradeType));
+	return FText::Format(INVTEXT("{0}"), CostOfItem);
 }
 
 void AStatVendor::BeginPlay()

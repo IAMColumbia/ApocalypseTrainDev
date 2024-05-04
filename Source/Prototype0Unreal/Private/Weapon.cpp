@@ -145,14 +145,14 @@ void AWeapon::WeaponEquipped()
 
 }
 
-void AWeapon::GetRayVector(FVector*& rayStart, FVector*& rayEnd) {
+void AWeapon::GetRayVector(FVector* rayStart, FVector* rayEnd) {
 	FVector start = GetActorLocation();
 	FVector forward = BulletSpawn->GetForwardVector();
 	forward.Z = 0;
 	start = FVector(start.X + (forward.X * RayOffset), start.Y + (forward.Y * RayOffset), start.Z + (forward.Z * RayOffset));
 	FVector end = start + forward * RayLength;
-	rayStart = &start;
-	rayEnd = &end;
+	*rayStart = start;
+	*rayEnd = end;
 }
 
 void AWeapon::DetermineShotWithRay()
@@ -160,15 +160,17 @@ void AWeapon::DetermineShotWithRay()
 	if (BulletSpawn == NULL) {
 		return;
 	}
-	FVector* start;
-	FVector* end;
-	GetRayVector(start, end);
+	FVector start = FVector(0, 0, 0);
+	FVector end = FVector(0, 0, 0);
+	FVector* startptr = &start;
+	FVector* endptr = &end;
+	GetRayVector(startptr, endptr);
 	FHitResult hit;
 	if (GetWorld()) {
 		FCollisionQueryParams QueryParams;
 		QueryParams.AddIgnoredActor(this);
 		QueryParams.AddIgnoredActor(OwnerCharacter);
-		bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, *start, *end, ECC_Pawn, QueryParams, FCollisionResponseParams());
+		bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, QueryParams, FCollisionResponseParams());
 		//DrawDebugLine(GetWorld(), start, end, FColor::Red, false, 0.15f, 0.f, 10.f);
 		if (actorHit && hit.GetActor()) {
 			

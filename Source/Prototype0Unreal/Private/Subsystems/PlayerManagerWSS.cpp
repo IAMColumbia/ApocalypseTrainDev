@@ -51,7 +51,7 @@ int UPlayerManagerWSS::NumActivePlayers()
 void UPlayerManagerWSS::CheckGameOver()
 {
 	//NOT HAVING PLAYERS DYING END THE GAME
-	if (AllPlayersDead()) {
+	if (AllPlayersDead() && Players.Num() > 1) {
 		
 		GetWorld()->GetSubsystem<UGameManagerWSS>()->GameOver(1);
 	}

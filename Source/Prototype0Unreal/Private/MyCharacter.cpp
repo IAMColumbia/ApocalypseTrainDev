@@ -240,15 +240,15 @@ void AMyCharacter::OnEnemyKilled()
 
 void AMyCharacter::CheckForEnemyShowHealth()
 {
-	FVector* start;
-	FVector* end;
-	CurrentWeapon->GetRayVector(start, end);
+	FVector start = FVector(0,0,0);
+	FVector end = FVector(0,0,0);
+	//CurrentWeapon->GetRayVector(&start, &end);
 	FHitResult hit;
 	if (GetWorld()) {
 		FCollisionQueryParams QueryParams;
 		QueryParams.AddIgnoredActor(this);
 		QueryParams.AddIgnoredActor(CurrentWeapon);
-		bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, *start, *end, ECC_Pawn, QueryParams, FCollisionResponseParams());
+		bool actorHit = GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_Pawn, QueryParams, FCollisionResponseParams());
 		if (actorHit && hit.GetActor()) {
 			if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(hit.GetActor())) {
 				enemy->InViewOfPlayer = true;
