@@ -28,13 +28,11 @@ void AObstacle::Tick(float DeltaTime)
 void AObstacle::DamageObstacle(float damage)
 {
 	currentHealth -= FGenericPlatformMath::Abs(damage);
+	NotifyDamageObstacle(damage);
 	//GEngine->AddOnScreenDebugMessage(1, 3, FColor::Red, FString::Printf(TEXT("TRAIN HIT OBSTACLE % f"), currentHealth));
 	if (currentHealth <= 0) {
 		//AActor::Destroy();
 		ObstacleDestroyed();
-	}
-	else {
-		NotifyDamageObstacle(damage);
 	}
 }
 
