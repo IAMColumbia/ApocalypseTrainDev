@@ -6,6 +6,14 @@
 #include "GameFramework/Actor.h"
 #include "MusicManager.generated.h"
 
+
+
+UENUM(BlueprintType)
+enum class EMusicState : uint8 {
+	start UMETA(DIsplayName = "Start"), pickup UMETA(DIsplayName = "Pickup"), main UMETA(DIsplayName = "Main"), encounter UMETA(DIsplayName = "Encounter"), gameover UMETA(DIsplayName = "GameOver")
+};
+
+
 UCLASS()
 class PROTOTYPE0UNREAL_API AMusicManager : public AActor
 {
@@ -20,6 +28,9 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EMusicState musicState;
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

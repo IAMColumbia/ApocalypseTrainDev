@@ -25,6 +25,7 @@ void ATrain::IncreaseDifficulty()
 {
 	burnRate += burnRateIncrease;
 	MaxTrainSpeed += trainSpeedIncrease;
+	DecelerationRate += trainSpeedIncrease;
 }
 
 void ATrain::StartTrain()
