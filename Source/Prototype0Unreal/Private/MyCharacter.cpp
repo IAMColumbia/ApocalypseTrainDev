@@ -148,7 +148,7 @@ void AMyCharacter::InteractPressed() {
 				if (carriedObject != NULL) {
 					if (trainPtr->AddFuel()) {
 						carriedObject->Destroy();
-						TotalFuelDeposited++;
+						IncreaseTotalFuel();
 					}
 				}
 			}
@@ -206,6 +206,12 @@ void AMyCharacter::CheckDropItem()
 	}
 }
 
+
+void AMyCharacter::IncreaseTotalFuel()
+{
+	TotalFuelDeposited++;
+	//GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Cyan, FString::Printf(TEXT("Total Fuel: %d"), TotalFuelDeposited));
+}
 
 FPlayerInfo AMyCharacter::GetPlayerInfo()
 {

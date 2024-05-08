@@ -67,6 +67,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	int TotalFuelDeposited;
 
+	void IncreaseTotalFuel();
+
 	UFUNCTION(BlueprintCallable)
 	FPlayerInfo GetPlayerInfo();
 

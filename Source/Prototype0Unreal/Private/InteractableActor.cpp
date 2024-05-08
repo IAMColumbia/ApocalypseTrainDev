@@ -117,7 +117,7 @@ void AInteractableActor::OnTriggerEndOverlap(UPrimitiveComponent* OverlappedComp
 void AInteractableActor::OnFuelAddedToTrain()
 {
 	if (LastCarryingPlayer != NULL) {
-		LastCarryingPlayer->TotalFuelDeposited++;
+		LastCarryingPlayer->IncreaseTotalFuel();
 	}
 }
 
