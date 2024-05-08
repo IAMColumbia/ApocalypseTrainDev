@@ -53,7 +53,7 @@ public:
 	void StartTrain();
 	void StopTrain();
 
-	void MovementUpdate();
+	void MovementUpdate(float deltaTime);
 
 	bool HasFuel();
 

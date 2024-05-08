@@ -41,6 +41,11 @@ void AWeapon::ApplyPlayerKnockback()
 	OwnerCharacter->LaunchCharacter((BulletSpawn->GetForwardVector() * -1) * force, true, true);
 }
 
+float AWeapon::GetDamage()
+{
+	return Damage - FMath::RandRange(0, ((int)(OwnerCharacter->DamageBuff / 2) + 3)) + OwnerCharacter->DamageBuff;
+}
+
 // Called when the game starts or when spawned
 void AWeapon::BeginPlay()
 {
@@ -176,7 +181,7 @@ void AWeapon::DetermineShotWithRay()
 			
 			//GEngine->AddOnScreenDebugMessage(-1, 2.0f, FColor::Red, hit.GetActor()->GetFName().ToString());
 			if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(hit.GetActor())) {
-				if (enemy->TakeDamage(hit.Distance, Damage - FMath::RandRange(0, ((int)(OwnerCharacter->DamageBuff / 2) + 3)) + OwnerCharacter->DamageBuff, GetActorLocation(), KnockbackForce, true)) {
+				if (enemy->TakeDamage(hit.Distance, GetDamage(), GetActorLocation(), KnockbackForce, true)) {
 					KilledEnemy();
 				}
 			}

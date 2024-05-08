@@ -39,4 +39,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void Explode();
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	float GetDamage();
 };

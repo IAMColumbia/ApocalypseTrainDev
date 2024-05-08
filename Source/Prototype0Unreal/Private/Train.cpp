@@ -25,8 +25,9 @@ void ATrain::IncreaseDifficulty()
 {
 	burnRate += burnRateIncrease;
 	MaxTrainSpeed += trainSpeedIncrease;
-	DecelerationRate += trainSpeedIncrease;
+	DecelerationRate = (MaxTrainSpeed / 2);
 }
+
 
 void ATrain::StartTrain()
 {
@@ -42,7 +43,7 @@ void ATrain::StopTrain()
 	}
 }
 
-void ATrain::MovementUpdate()
+void ATrain::MovementUpdate(float deltaTime)
 {
 	switch (currentTrainState) {
 		case ETrainState::stopped:
@@ -52,7 +53,7 @@ void ATrain::MovementUpdate()
 			break;
 		case ETrainState::starting:
 			if (currentTrainSpeed < tutorialMaxTrainSpeed) {
-				currentTrainSpeed += AccelerationRate;
+				currentTrainSpeed += AccelerationRate * deltaTime;
 			}
 			if (GetActorLocation().Y > TutorialEnd) {
 				SetTrainState(ETrainState::accelerating);
@@ -61,13 +62,13 @@ void ATrain::MovementUpdate()
 			break;
 		case ETrainState::accelerating:
 			if (currentTrainSpeed < MaxTrainSpeed) {
-				currentTrainSpeed += AccelerationRate;
+				currentTrainSpeed += AccelerationRate * deltaTime;
 			}
 			break;
 		case ETrainState::decelerating:
 			if (isReversing) {
 				if (currentTrainSpeed < 0) {
-					currentTrainSpeed += DecelerationRate;
+					currentTrainSpeed += DecelerationRate * deltaTime;
 				}
 				else {
 					isReversing = false;
@@ -75,7 +76,7 @@ void ATrain::MovementUpdate()
 			}
 			else {
 				if (currentTrainSpeed > 0) {
-					currentTrainSpeed -= DecelerationRate;
+					currentTrainSpeed -= DecelerationRate * deltaTime;
 				}
 				else {
 					SetTrainState(ETrainState::stopped);
@@ -186,7 +187,7 @@ void ATrain::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	if (CanMove) {
-		MovementUpdate();
+		MovementUpdate(DeltaTime);
 		currentLocation = GetActorLocation();
 		currentLocation += FVector(0, 1, 0) * currentTrainSpeed * DeltaTime;
 		SetActorLocation(currentLocation, true);

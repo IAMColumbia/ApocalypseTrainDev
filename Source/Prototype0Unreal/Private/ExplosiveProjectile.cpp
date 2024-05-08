@@ -34,6 +34,11 @@ void AExplosiveProjectile::Explode()
 	explosionHitCheck->InitSphereRadius(radius);
 }
 
+float AExplosiveProjectile::GetDamage()
+{
+	return ownerWeapon->GetDamage();
+}
+
 void AExplosiveProjectile::KilledEnemy()
 {
 	ownerWeapon->KilledEnemy();
