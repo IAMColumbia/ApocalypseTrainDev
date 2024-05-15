@@ -43,7 +43,7 @@ void AWeapon::ApplyPlayerKnockback()
 
 float AWeapon::GetDamage()
 {
-	return Damage - FMath::RandRange(0, ((int)(OwnerCharacter->DamageBuff / 2) + 3)) + OwnerCharacter->DamageBuff;
+	return Damage - FMath::RandRange(0, ((int)(OwnerCharacter->DamageBuff / 2) + 3)) + OwnerCharacter->DamageBuff + Damage;
 }
 
 // Called when the game starts or when spawned

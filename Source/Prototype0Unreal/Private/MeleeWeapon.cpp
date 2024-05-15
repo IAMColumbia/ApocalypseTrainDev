@@ -49,7 +49,7 @@ void AMeleeWeapon::OnWeaponBeginOverlap(UPrimitiveComponent* OverlappedComp, AAc
 			HitObstacle();
 		}
 		if (AEnemyCharacter* enemy = Cast<AEnemyCharacter>(OtherActor)) {
-			if (enemy->TakeDamage(0, EnemyDamage, GetActorLocation(), KnockbackForce, true)) {
+			if (enemy->TakeDamage(0, EnemyDamage + OwnerCharacter->DamageBuff, GetActorLocation(), KnockbackForce, true)) {
 				if (OwnerCharacter != NULL) {
 					OwnerCharacter->OnEnemyKilled();
 				}
